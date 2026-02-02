@@ -202,7 +202,7 @@ export function AdminDashboardView() {
                           >
                             <div>
                               <p className="font-medium text-foreground">{item.title}</p>
-                              <p className="text-sm text-muted">โดย: {item.author}</p>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">โดย: {item.author}</p>
                             </div>
                             <div className="flex items-center gap-2">
                               <span className={`px-2 py-1 text-xs rounded-full ${
@@ -235,9 +235,9 @@ export function AdminDashboardView() {
                             </span>
                             <div className="flex-1">
                               <p className="text-foreground">{activity.title}</p>
-                              <p className="text-sm text-muted">{activity.user}</p>
+                               <p className="text-sm text-gray-600 dark:text-gray-400">{activity.user}</p>
                             </div>
-                            <span className="text-xs text-muted">{activity.time}</span>
+                            <span className="text-xs text-gray-600 dark:text-gray-400">{activity.time}</span>
                           </div>
                         ))}
                       </div>

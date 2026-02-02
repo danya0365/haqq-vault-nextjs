@@ -298,7 +298,7 @@ function TopicCard({
           {topic.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-800 text-muted rounded"
+              className="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded"
             >
               #{tag}
             </span>

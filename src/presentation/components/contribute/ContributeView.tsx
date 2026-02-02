@@ -265,7 +265,7 @@ export function ContributeView() {
                               className={`flex-1 px-3 py-2 text-xs font-medium rounded-lg transition-all ${
                                 formData.severity === level.id
                                   ? level.color + ' ring-2 ring-offset-2 ring-current'
-                                  : 'bg-gray-100 dark:bg-gray-800 text-muted hover:bg-gray-200'
+                                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200'
                               }`}
                             >
                               {level.label}

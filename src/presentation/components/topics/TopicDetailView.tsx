@@ -178,7 +178,7 @@ export function TopicDetailView({ slug }: TopicDetailViewProps) {
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 activeSection === 'answer'
                   ? 'bg-primary text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-muted hover:text-foreground'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-foreground'
               }`}
             >
               📖 คำตอบ
@@ -188,7 +188,7 @@ export function TopicDetailView({ slug }: TopicDetailViewProps) {
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 activeSection === 'evidence'
                   ? 'bg-primary text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-muted hover:text-foreground'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-foreground'
               }`}
             >
               📜 หลักฐาน ({evidences.length})
@@ -212,7 +212,7 @@ export function TopicDetailView({ slug }: TopicDetailViewProps) {
                 <Link
                   key={tag}
                   href={`/topics?search=${encodeURIComponent(tag)}`}
-                  className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-muted hover:text-primary hover:bg-primary/10 rounded-lg text-sm transition-colors"
+                  className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg text-sm transition-colors"
                 >
                   #{tag}
                 </Link>

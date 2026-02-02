@@ -282,7 +282,7 @@ function SearchResultCard({
           </h3>
 
           {/* Short answer with highlight */}
-          <p className="text-sm text-muted">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             {highlightText(topic.shortAnswer)}
           </p>
 

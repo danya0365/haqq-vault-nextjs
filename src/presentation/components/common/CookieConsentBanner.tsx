@@ -204,7 +204,7 @@ export function CookieConsentBanner() {
                         <div className="flex items-center gap-2 mb-1">
                           <h4 className="font-medium text-foreground">{cookie.title}</h4>
                           {cookie.required && (
-                            <span className="px-2 py-0.5 text-xs bg-gray-200 dark:bg-gray-700 text-muted rounded-full">
+                            <span className="px-2 py-0.5 text-xs bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">
                               จำเป็น
                             </span>
                           )}
