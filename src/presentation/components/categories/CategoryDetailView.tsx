@@ -11,7 +11,7 @@ import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedB
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
 import { MainLayout } from '@/src/presentation/layouts/MainLayout';
-import { animated, useSpring, useTrail } from '@react-spring/web';
+import { animated, useSpring } from '@react-spring/web';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -59,12 +59,7 @@ export function CategoryDetailView({ slug }: CategoryDetailViewProps) {
     config: { tension: 200, friction: 20 },
   });
 
-  const trail = useTrail(topics.length, {
-    opacity: isLoaded ? 1 : 0,
-    y: isLoaded ? 0 : 20,
-    config: { tension: 200, friction: 25 },
-    delay: 300,
-  });
+  // No longer using useTrail to avoid "Maximum call stack size exceeded"
 
   if (!category) {
     return <NotFoundState />;
@@ -189,55 +184,14 @@ export function CategoryDetailView({ slug }: CategoryDetailViewProps) {
           {/* Topics List */}
           {topics.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {trail.map((spring, index) => {
-                const topic = topics[index];
-                const severity = getSeverityBadge(topic.severityLevel);
-
-                return (
-                  <animated.div key={topic.id} style={spring}>
-                    <Link href={`/topics/${topic.slug}`}>
-                      <AnimatedCard className="h-full p-5" variant="bordered">
-                        {/* Header */}
-                        <div className="flex items-start justify-between mb-3">
-                          <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${severity.class}`}>
-                            {severity.icon} {severity.label}
-                          </span>
-                          {topic.isVerified && (
-                            <span className="text-primary" title="ได้รับการยืนยัน">
-                              ✓
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Title */}
-                        <h3 className="font-semibold text-lg text-foreground mb-2 line-clamp-2">
-                          {topic.title}
-                        </h3>
-
-                        {/* Short answer */}
-                        <p className="text-sm text-muted line-clamp-3 mb-4">
-                          {topic.shortAnswer}
-                        </p>
-
-                        {/* Footer */}
-                        <div className="flex items-center justify-between text-xs text-muted mt-auto pt-3 border-t border-border">
-                          <span className="flex items-center gap-1">
-                            <span>👁</span>
-                            {topic.viewCount.toLocaleString()}
-                          </span>
-                          <span>
-                            {new Date(topic.createdAt).toLocaleDateString('th-TH', {
-                              year: 'numeric',
-                              month: 'short',
-                              day: 'numeric',
-                            })}
-                          </span>
-                        </div>
-                      </AnimatedCard>
-                    </Link>
-                  </animated.div>
-                );
-              })}
+              {topics.map((topic, index) => (
+                <TopicCardItem
+                  key={topic.id}
+                  topic={topic}
+                  index={index}
+                  isLoaded={isLoaded}
+                />
+              ))}
             </div>
           ) : (
             <div className="text-center py-16">
@@ -280,5 +234,83 @@ function NotFoundState() {
         </div>
       </div>
     </MainLayout>
+  );
+}
+
+/**
+ * Sub-component for individual topic card animation
+ */
+function TopicCardItem({
+  topic,
+  index,
+  isLoaded,
+}: {
+  topic: typeof MOCK_TOPICS[0];
+  index: number;
+  isLoaded: boolean;
+}) {
+  const spring = useSpring({
+    opacity: isLoaded ? 1 : 0,
+    y: isLoaded ? 0 : 20,
+    delay: 300 + index * 50,
+    config: { tension: 200, friction: 25 },
+  });
+
+  const getSeverityBadge = (level: typeof topic.severityLevel) => {
+    switch (level) {
+      case 'basic':
+        return { label: 'พื้นฐาน', class: 'badge-basic', icon: '🟢' };
+      case 'intermediate':
+        return { label: 'ปานกลาง', class: 'badge-intermediate', icon: '🟡' };
+      case 'advanced':
+        return { label: 'ขั้นสูง', class: 'badge-advanced', icon: '🔴' };
+    }
+  };
+
+  const severity = getSeverityBadge(topic.severityLevel);
+
+  return (
+    <animated.div style={spring}>
+      <Link href={`/topics/${topic.slug}`}>
+        <AnimatedCard className="h-full p-5" variant="bordered">
+          {/* Header */}
+          <div className="flex items-start justify-between mb-3">
+            <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${severity.class}`}>
+              {severity.icon} {severity.label}
+            </span>
+            {topic.isVerified && (
+              <span className="text-primary" title="ได้รับการยืนยัน">
+                ✓
+              </span>
+            )}
+          </div>
+
+          {/* Title */}
+          <h3 className="font-semibold text-lg text-foreground mb-2 line-clamp-2">
+            {topic.title}
+          </h3>
+
+          {/* Short answer */}
+          <p className="text-sm text-muted line-clamp-3 mb-4">
+            {topic.shortAnswer}
+          </p>
+
+          {/* Footer */}
+          <div className="flex items-center justify-between text-xs text-muted mt-auto pt-3 border-t border-border">
+            <span className="flex items-center gap-1">
+              <span>👁</span>
+              {topic.viewCount.toLocaleString()}
+            </span>
+            <span>
+              {new Date(topic.createdAt).toLocaleDateString('th-TH', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+              })}
+            </span>
+          </div>
+        </AnimatedCard>
+      </Link>
+    </animated.div>
   );
 }

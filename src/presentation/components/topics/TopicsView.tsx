@@ -10,7 +10,7 @@ import { MOCK_CATEGORIES, MOCK_TOPICS } from '@/src/infrastructure/repositories/
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
 import { MainLayout } from '@/src/presentation/layouts/MainLayout';
-import { animated, useSpring, useTrail } from '@react-spring/web';
+import { animated, useSpring } from '@react-spring/web';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -67,12 +67,7 @@ export function TopicsView() {
     config: { tension: 200, friction: 20 },
   });
 
-  const trail = useTrail(filteredTopics.length, {
-    opacity: isLoaded ? 1 : 0,
-    y: isLoaded ? 0 : 20,
-    config: { tension: 200, friction: 25 },
-    delay: 200,
-  });
+  // No longer using useTrail to avoid "Maximum call stack size exceeded"
 
   const clearFilters = () => {
     setSearchQuery('');
@@ -185,14 +180,14 @@ export function TopicsView() {
           {/* Topics Grid */}
           {filteredTopics.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {trail.map((spring, index) => {
-                const topic = filteredTopics[index];
-                return (
-                  <animated.div key={topic.id} style={spring}>
-                    <TopicCard topic={topic} />
-                  </animated.div>
-                );
-              })}
+              {filteredTopics.map((topic, index) => (
+                <TopicCard
+                  key={topic.id}
+                  topic={topic}
+                  index={index}
+                  isLoaded={isLoaded}
+                />
+              ))}
             </div>
           ) : (
             <EmptyState hasFilters={hasFilters} onClear={clearFilters} />
@@ -203,8 +198,23 @@ export function TopicsView() {
   );
 }
 
-// Topic Card Component
-function TopicCard({ topic }: { topic: Topic }) {
+// Topic Card Component with individual animation
+function TopicCard({ 
+  topic, 
+  index, 
+  isLoaded 
+}: { 
+  topic: Topic;
+  index: number;
+  isLoaded: boolean;
+}) {
+  const spring = useSpring({
+    opacity: isLoaded ? 1 : 0,
+    y: isLoaded ? 0 : 20,
+    delay: 200 + index * 50,
+    config: { tension: 200, friction: 25 },
+  });
+
   const category = MOCK_CATEGORIES.find((c) => c.id === topic.categoryId);
 
   const getSeverityBadge = (level: SeverityLevel) => {
@@ -221,8 +231,9 @@ function TopicCard({ topic }: { topic: Topic }) {
   const severity = getSeverityBadge(topic.severityLevel);
 
   return (
-    <Link href={`/topics/${topic.slug}`}>
-      <AnimatedCard className="h-full p-5" variant="bordered">
+    <animated.div style={spring}>
+      <Link href={`/topics/${topic.slug}`}>
+        <AnimatedCard className="h-full p-5" variant="bordered">
         {/* Header */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-2 flex-wrap">
@@ -295,6 +306,7 @@ function TopicCard({ topic }: { topic: Topic }) {
         </div>
       </AnimatedCard>
     </Link>
+    </animated.div>
   );
 }
 

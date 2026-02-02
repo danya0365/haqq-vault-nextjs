@@ -10,7 +10,7 @@ import { MOCK_CATEGORIES, MOCK_TOPICS } from '@/src/infrastructure/repositories/
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
 import { MainLayout } from '@/src/presentation/layouts/MainLayout';
-import { animated, useSpring, useTrail } from '@react-spring/web';
+import { animated, useSpring } from '@react-spring/web';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -35,12 +35,7 @@ export function PopularView() {
     config: { tension: 200, friction: 20 },
   });
 
-  const trail = useTrail(popularTopics.length, {
-    opacity: isLoaded ? 1 : 0,
-    x: isLoaded ? 0 : -20,
-    config: { tension: 200, friction: 25 },
-    delay: 200,
-  });
+  // No longer using useTrail to avoid "Maximum call stack size exceeded"
 
   const getSeverityBadge = (level: SeverityLevel) => {
     switch (level) {
@@ -72,67 +67,105 @@ export function PopularView() {
 
           {/* Popular Topics List */}
           <div className="space-y-4">
-            {trail.map((spring, index) => {
-              const topic = popularTopics[index];
-              const category = MOCK_CATEGORIES.find((c) => c.id === topic.categoryId);
-              const severity = getSeverityBadge(topic.severityLevel);
-
-              return (
-                <animated.div key={topic.id} style={spring}>
-                  <Link href={`/topics/${topic.slug}`}>
-                    <AnimatedCard className="p-5" variant="bordered">
-                      <div className="flex items-start gap-4">
-                        {/* Rank */}
-                        <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
-                          <span className="text-xl font-bold text-white">
-                            {index + 1}
-                          </span>
-                        </div>
-
-                        {/* Content */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-2 flex-wrap">
-                            {category && (
-                              <span
-                                className="px-2 py-0.5 text-xs rounded-full"
-                                style={{
-                                  backgroundColor: `${category.color}15`,
-                                  color: category.color,
-                                }}
-                              >
-                                {category.icon} {category.name}
-                              </span>
-                            )}
-                            <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${severity.class}`}>
-                              {severity.label}
-                            </span>
-                          </div>
-
-                          <h2 className="font-semibold text-lg text-foreground mb-1 line-clamp-1">
-                            {topic.title}
-                          </h2>
-
-                          <p className="text-sm text-muted line-clamp-2">
-                            {topic.shortAnswer}
-                          </p>
-                        </div>
-
-                        {/* View count */}
-                        <div className="flex-shrink-0 text-right">
-                          <div className="text-lg font-semibold text-primary">
-                            {topic.viewCount.toLocaleString()}
-                          </div>
-                          <div className="text-xs text-muted">เข้าชม</div>
-                        </div>
-                      </div>
-                    </AnimatedCard>
-                  </Link>
-                </animated.div>
-              );
-            })}
+            {popularTopics.map((topic, index) => (
+              <PopularTopicItem
+                key={topic.id}
+                topic={topic}
+                index={index}
+                isLoaded={isLoaded}
+              />
+            ))}
           </div>
         </div>
       </div>
     </MainLayout>
+  );
+}
+
+/**
+ * Sub-component for individual popular topic card animation
+ */
+function PopularTopicItem({
+  topic,
+  index,
+  isLoaded,
+}: {
+  topic: typeof MOCK_TOPICS[0];
+  index: number;
+  isLoaded: boolean;
+}) {
+  const spring = useSpring({
+    opacity: isLoaded ? 1 : 0,
+    x: isLoaded ? 0 : -20,
+    delay: 200 + index * 50,
+    config: { tension: 200, friction: 25 },
+  });
+
+  const category = MOCK_CATEGORIES.find((c) => c.id === topic.categoryId);
+
+  const getSeverityBadge = (level: typeof topic.severityLevel) => {
+    switch (level) {
+      case 'basic':
+        return { label: 'พื้นฐาน', class: 'badge-basic' };
+      case 'intermediate':
+        return { label: 'ปานกลาง', class: 'badge-intermediate' };
+      case 'advanced':
+        return { label: 'ขั้นสูง', class: 'badge-advanced' };
+    }
+  };
+
+  const severity = getSeverityBadge(topic.severityLevel);
+
+  return (
+    <animated.div style={spring}>
+      <Link href={`/topics/${topic.slug}`}>
+        <AnimatedCard className="p-5" variant="bordered">
+          <div className="flex items-start gap-4">
+            {/* Rank */}
+            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
+              <span className="text-xl font-bold text-white">
+                {index + 1}
+              </span>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-2 flex-wrap">
+                {category && (
+                  <span
+                    className="px-2 py-0.5 text-xs rounded-full"
+                    style={{
+                      backgroundColor: `${category.color}15`,
+                      color: category.color,
+                    }}
+                  >
+                    {category.icon} {category.name}
+                  </span>
+                )}
+                <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${severity.class}`}>
+                  {severity.label}
+                </span>
+              </div>
+
+              <h2 className="font-semibold text-lg text-foreground mb-1 line-clamp-1">
+                {topic.title}
+              </h2>
+
+              <p className="text-sm text-muted line-clamp-2">
+                {topic.shortAnswer}
+              </p>
+            </div>
+
+            {/* View count */}
+            <div className="flex-shrink-0 text-right">
+              <div className="text-lg font-semibold text-primary">
+                {topic.viewCount.toLocaleString()}
+              </div>
+              <div className="text-xs text-muted">เข้าชม</div>
+            </div>
+          </div>
+        </AnimatedCard>
+      </Link>
+    </animated.div>
   );
 }

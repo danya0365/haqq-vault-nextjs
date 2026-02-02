@@ -11,7 +11,7 @@ import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedB
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
 import { MainLayout } from '@/src/presentation/layouts/MainLayout';
-import { animated, useSpring, useTrail } from '@react-spring/web';
+import { animated, useSpring } from '@react-spring/web';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -76,12 +76,7 @@ export function SearchView() {
     config: { tension: 200, friction: 20 },
   });
 
-  const trail = useTrail(results.length, {
-    opacity: isLoaded && debouncedQuery ? 1 : 0,
-    y: isLoaded && debouncedQuery ? 0 : 20,
-    config: { tension: 200, friction: 25 },
-    delay: 100,
-  });
+  // No longer using useTrail to avoid "Maximum call stack size exceeded"
 
   return (
     <MainLayout>
@@ -159,14 +154,15 @@ export function SearchView() {
               {/* Results list */}
               {results.length > 0 ? (
                 <div className="space-y-4">
-                  {trail.map((spring, index) => {
-                    const topic = results[index];
-                    return (
-                      <animated.div key={topic.id} style={spring}>
-                        <SearchResultCard topic={topic} query={debouncedQuery} />
-                      </animated.div>
-                    );
-                  })}
+                  {results.map((topic, index) => (
+                    <SearchResultCard
+                      key={topic.id}
+                      topic={topic}
+                      index={index}
+                      query={debouncedQuery}
+                      isLoaded={isLoaded}
+                    />
+                  ))}
                 </div>
               ) : (
                 <NoResultsState query={debouncedQuery} />
@@ -200,8 +196,25 @@ export function SearchView() {
   );
 }
 
-// Search Result Card with highlighting
-function SearchResultCard({ topic, query }: { topic: Topic; query: string }) {
+// Search Result Card with highlighting and individual animation
+function SearchResultCard({ 
+  topic, 
+  query,
+  index,
+  isLoaded
+}: { 
+  topic: Topic; 
+  query: string;
+  index: number;
+  isLoaded: boolean;
+}) {
+  const spring = useSpring({
+    opacity: isLoaded ? 1 : 0,
+    y: isLoaded ? 0 : 20,
+    delay: 100 + index * 30, // Shorter stagger for search results
+    config: { tension: 200, friction: 25 },
+  });
+
   const category = MOCK_CATEGORIES.find((c) => c.id === topic.categoryId);
 
   const getSeverityBadge = (level: SeverityLevel) => {
@@ -235,60 +248,62 @@ function SearchResultCard({ topic, query }: { topic: Topic; query: string }) {
   }, [query]);
 
   return (
-    <Link href={`/topics/${topic.slug}`}>
-      <AnimatedCard className="p-5" variant="bordered">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4 mb-3">
-          <div className="flex items-center gap-2 flex-wrap">
-            {category && (
-              <span
-                className="px-2 py-0.5 text-xs rounded-full"
-                style={{
-                  backgroundColor: `${category.color}15`,
-                  color: category.color,
-                }}
-              >
-                {category.icon} {category.name}
+    <animated.div style={spring}>
+      <Link href={`/topics/${topic.slug}`}>
+        <AnimatedCard className="p-5" variant="bordered">
+          {/* Header */}
+          <div className="flex items-start justify-between gap-4 mb-3">
+            <div className="flex items-center gap-2 flex-wrap">
+              {category && (
+                <span
+                  className="px-2 py-0.5 text-xs rounded-full"
+                  style={{
+                    backgroundColor: `${category.color}15`,
+                    color: category.color,
+                  }}
+                >
+                  {category.icon} {category.name}
+                </span>
+              )}
+              <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${severity.class}`}>
+                {severity.label}
+              </span>
+            </div>
+            {topic.isVerified && (
+              <span className="text-primary flex-shrink-0" title="ได้รับการยืนยัน">
+                ✓
               </span>
             )}
-            <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${severity.class}`}>
-              {severity.label}
-            </span>
           </div>
-          {topic.isVerified && (
-            <span className="text-primary flex-shrink-0" title="ได้รับการยืนยัน">
-              ✓
-            </span>
+
+          {/* Title */}
+          <h3 className="font-semibold text-lg text-foreground mb-2">
+            {highlightText(topic.title, 100)}
+          </h3>
+
+          {/* Short answer with highlight */}
+          <p className="text-sm text-muted">
+            {highlightText(topic.shortAnswer)}
+          </p>
+
+          {/* Matched tags */}
+          {topic.tags.some((tag) => tag.toLowerCase().includes(query.toLowerCase())) && (
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {topic.tags
+                .filter((tag) => tag.toLowerCase().includes(query.toLowerCase()))
+                .map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-2 py-0.5 text-xs bg-primary/10 text-primary rounded"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+            </div>
           )}
-        </div>
-
-        {/* Title */}
-        <h3 className="font-semibold text-lg text-foreground mb-2">
-          {highlightText(topic.title, 100)}
-        </h3>
-
-        {/* Short answer with highlight */}
-        <p className="text-sm text-muted">
-          {highlightText(topic.shortAnswer)}
-        </p>
-
-        {/* Matched tags */}
-        {topic.tags.some((tag) => tag.toLowerCase().includes(query.toLowerCase())) && (
-          <div className="flex flex-wrap gap-1.5 mt-3">
-            {topic.tags
-              .filter((tag) => tag.toLowerCase().includes(query.toLowerCase()))
-              .map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2 py-0.5 text-xs bg-primary/10 text-primary rounded"
-                >
-                  #{tag}
-                </span>
-              ))}
-          </div>
-        )}
-      </AnimatedCard>
-    </Link>
+        </AnimatedCard>
+      </Link>
+    </animated.div>
   );
 }
 

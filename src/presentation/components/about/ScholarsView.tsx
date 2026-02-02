@@ -8,7 +8,7 @@
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
 import { MainLayout } from '@/src/presentation/layouts/MainLayout';
-import { animated, useSpring, useTrail } from '@react-spring/web';
+import { animated, useSpring } from '@react-spring/web';
 import { useEffect, useState } from 'react';
 
 interface Scholar {
@@ -69,12 +69,7 @@ export function ScholarsView() {
     config: { tension: 200, friction: 20 },
   });
 
-  const trail = useTrail(SCHOLARS.length, {
-    opacity: isLoaded ? 1 : 0,
-    y: isLoaded ? 0 : 30,
-    config: { tension: 200, friction: 25 },
-    delay: 200,
-  });
+  // No longer using useTrail to avoid "Maximum call stack size exceeded"
 
   return (
     <MainLayout>
@@ -95,42 +90,14 @@ export function ScholarsView() {
 
           {/* Scholars Grid */}
           <div className="grid md:grid-cols-2 gap-6">
-            {trail.map((spring, index) => {
-              const scholar = SCHOLARS[index];
-              return (
-                <animated.div key={scholar.id} style={spring}>
-                  <AnimatedCard className="h-full p-6" variant="elevated">
-                    <div className="flex items-start gap-4">
-                      {/* Avatar */}
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center flex-shrink-0">
-                        <span className="text-2xl text-white">🎓</span>
-                      </div>
-
-                      {/* Info */}
-                      <div className="flex-1">
-                        <h3 className="font-bold text-lg text-foreground">
-                          {scholar.name}
-                        </h3>
-                        {scholar.nameArabic && (
-                          <p className="arabic-text text-muted text-sm mb-1">
-                            {scholar.nameArabic}
-                          </p>
-                        )}
-                        <p className="text-sm text-primary font-medium mb-2">
-                          {scholar.title}
-                        </p>
-                        <div className="inline-block px-2 py-0.5 bg-gold/10 text-gold-dark dark:text-gold text-xs rounded-full mb-3">
-                          {scholar.specialization}
-                        </div>
-                        <p className="text-sm text-muted leading-relaxed">
-                          {scholar.bio}
-                        </p>
-                      </div>
-                    </div>
-                  </AnimatedCard>
-                </animated.div>
-              );
-            })}
+            {SCHOLARS.map((scholar, index) => (
+              <ScholarCardItem
+                key={scholar.id}
+                scholar={scholar}
+                index={index}
+                isLoaded={isLoaded}
+              />
+            ))}
           </div>
 
           {/* Note */}
@@ -144,5 +111,59 @@ export function ScholarsView() {
         </div>
       </div>
     </MainLayout>
+  );
+}
+
+/**
+ * Sub-component for individual scholar card animation
+ */
+function ScholarCardItem({
+  scholar,
+  index,
+  isLoaded,
+}: {
+  scholar: Scholar;
+  index: number;
+  isLoaded: boolean;
+}) {
+  const spring = useSpring({
+    opacity: isLoaded ? 1 : 0,
+    y: isLoaded ? 0 : 30,
+    delay: 200 + index * 50,
+    config: { tension: 200, friction: 25 },
+  });
+
+  return (
+    <animated.div style={spring}>
+      <AnimatedCard className="h-full p-6" variant="elevated">
+        <div className="flex items-start gap-4">
+          {/* Avatar */}
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center flex-shrink-0">
+            <span className="text-2xl text-white">🎓</span>
+          </div>
+
+          {/* Info */}
+          <div className="flex-1">
+            <h3 className="font-bold text-lg text-foreground">
+              {scholar.name}
+            </h3>
+            {scholar.nameArabic && (
+              <p className="arabic-text text-muted text-sm mb-1">
+                {scholar.nameArabic}
+              </p>
+            )}
+            <p className="text-sm text-primary font-medium mb-2">
+              {scholar.title}
+            </p>
+            <div className="inline-block px-2 py-0.5 bg-gold/10 text-gold-dark dark:text-gold text-xs rounded-full mb-3">
+              {scholar.specialization}
+            </div>
+            <p className="text-sm text-muted leading-relaxed">
+              {scholar.bio}
+            </p>
+          </div>
+        </div>
+      </AnimatedCard>
+    </animated.div>
   );
 }

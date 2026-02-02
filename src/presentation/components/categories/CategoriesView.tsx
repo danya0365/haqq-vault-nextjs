@@ -9,7 +9,7 @@ import { MOCK_CATEGORIES } from '@/src/infrastructure/repositories/mock/data/moc
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
 import { MainLayout } from '@/src/presentation/layouts/MainLayout';
-import { animated, useSpring, useTrail } from '@react-spring/web';
+import { animated, useSpring } from '@react-spring/web';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -26,14 +26,6 @@ export function CategoriesView() {
     opacity: isLoaded ? 1 : 0,
     y: isLoaded ? 0 : 20,
     config: { tension: 200, friction: 20 },
-  });
-
-  const trail = useTrail(categories.length, {
-    opacity: isLoaded ? 1 : 0,
-    y: isLoaded ? 0 : 30,
-    scale: isLoaded ? 1 : 0.95,
-    config: { tension: 200, friction: 25 },
-    delay: 200,
   });
 
   return (
@@ -55,64 +47,14 @@ export function CategoriesView() {
 
           {/* Categories Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {trail.map((spring, index) => {
-              const category = categories[index];
-              return (
-                <animated.div key={category.id} style={spring}>
-                  <Link href={`/categories/${category.slug}`}>
-                    <AnimatedCard className="h-full overflow-hidden" variant="elevated">
-                      {/* Color banner */}
-                      <div
-                        className="h-2"
-                        style={{ backgroundColor: category.color }}
-                      />
-                      
-                      <div className="p-6">
-                        {/* Icon */}
-                        <div
-                          className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-4"
-                          style={{ backgroundColor: `${category.color}15` }}
-                        >
-                          {category.icon}
-                        </div>
-
-                        {/* Content */}
-                        <h2 className="text-xl font-bold text-foreground mb-1">
-                          {category.name}
-                        </h2>
-                        
-                        {category.nameArabic && (
-                          <p className="arabic-text text-lg text-muted mb-3">
-                            {category.nameArabic}
-                          </p>
-                        )}
-
-                        <p className="text-muted text-sm leading-relaxed mb-4">
-                          {category.description}
-                        </p>
-
-                        {/* Stats */}
-                        <div className="flex items-center justify-between pt-4 border-t border-border">
-                          <div className="flex items-center gap-2">
-                            <span
-                              className="w-2 h-2 rounded-full"
-                              style={{ backgroundColor: category.color }}
-                            />
-                            <span className="text-sm text-muted">
-                              {category.topicCount} คำตอบ
-                            </span>
-                          </div>
-                          <span className="text-primary text-sm font-medium flex items-center gap-1">
-                            ดูทั้งหมด
-                            <span>→</span>
-                          </span>
-                        </div>
-                      </div>
-                    </AnimatedCard>
-                  </Link>
-                </animated.div>
-              );
-            })}
+            {categories.map((category, index) => (
+              <CategoryCardItem
+                key={category.id}
+                category={category}
+                index={index}
+                isLoaded={isLoaded}
+              />
+            ))}
           </div>
 
           {/* Decorative section */}
@@ -129,5 +71,83 @@ export function CategoriesView() {
         </div>
       </div>
     </MainLayout>
+  );
+}
+
+/**
+ * Sub-component to handle individual entry animation
+ * This replaces useTrail to avoid "Maximum call stack size exceeded"
+ */
+function CategoryCardItem({ 
+  category, 
+  index, 
+  isLoaded 
+}: { 
+  category: typeof MOCK_CATEGORIES[0], 
+  index: number, 
+  isLoaded: boolean 
+}) {
+  const spring = useSpring({
+    opacity: isLoaded ? 1 : 0,
+    y: isLoaded ? 0 : 30,
+    scale: isLoaded ? 1 : 0.95,
+    delay: 150 + index * 50, // Stagger effect
+    config: { tension: 200, friction: 25 },
+  });
+
+  return (
+    <animated.div style={spring}>
+      <Link href={`/categories/${category.slug}`}>
+        <AnimatedCard className="h-full overflow-hidden" variant="elevated">
+          {/* Color banner */}
+          <div
+            className="h-2"
+            style={{ backgroundColor: category.color }}
+          />
+          
+          <div className="p-6">
+            {/* Icon */}
+            <div
+              className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-4"
+              style={{ backgroundColor: `${category.color}15` }}
+            >
+              {category.icon}
+            </div>
+
+            {/* Content */}
+            <h2 className="text-xl font-bold text-foreground mb-1">
+              {category.name}
+            </h2>
+            
+            {category.nameArabic && (
+              <p className="arabic-text text-lg text-muted mb-3">
+                {category.nameArabic}
+              </p>
+            )}
+
+            <p className="text-muted text-sm leading-relaxed mb-4">
+              {category.description}
+            </p>
+
+            {/* Stats */}
+            <div className="flex items-center justify-between pt-4 border-t border-border">
+              <div className="flex items-center gap-2">
+                <span
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: category.color }}
+                />
+                <span className="text-sm text-muted">
+                  {category.topicCount} คำตอบ
+                </span>
+              </div>
+              <span className="text-primary text-sm font-medium flex items-center gap-1">
+                ดูทั้งหมด
+                <span>→</span>
+              </span>
+            </div>
+          </div>
+        </AnimatedCard>
+      </Link>
+    </animated.div>
   );
 }

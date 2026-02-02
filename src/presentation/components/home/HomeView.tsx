@@ -10,7 +10,7 @@ import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedB
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
 import { MainLayout } from '@/src/presentation/layouts/MainLayout';
-import { animated, useSpring, useTrail } from '@react-spring/web';
+import { animated, useSpring } from '@react-spring/web';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -182,12 +182,7 @@ function CategoriesSection({
   categories: any[];
   isLoaded: boolean;
 }) {
-  const trail = useTrail(categories.length, {
-    opacity: isLoaded ? 1 : 0,
-    y: isLoaded ? 0 : 30,
-    config: { tension: 200, friction: 25 },
-    delay: 500,
-  });
+  // No longer using useTrail to avoid "Maximum call stack size exceeded"
 
   return (
     <section className="py-16 md:py-24 bg-surface-warm dark:bg-surface/50">
@@ -207,45 +202,14 @@ function CategoriesSection({
 
         {/* Categories grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {trail.map((spring, index) => {
-            const category = categories[index];
-            return (
-              <animated.div key={category.id} style={spring}>
-                <Link href={`/categories/${category.slug}`}>
-                  <AnimatedCard className="p-6 h-full" variant="bordered">
-                    <div className="flex items-start gap-4">
-                      <div
-                        className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl"
-                        style={{ backgroundColor: `${category.color}20` }}
-                      >
-                        {category.icon}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-lg text-foreground mb-1">
-                          {category.name}
-                        </h3>
-                        {category.nameArabic && (
-                          <p className="arabic-text text-sm text-muted mb-2">
-                            {category.nameArabic}
-                          </p>
-                        )}
-                        <p className="text-sm text-muted line-clamp-2">
-                          {category.description}
-                        </p>
-                        <div className="flex items-center gap-2 mt-3 text-xs text-muted">
-                          <span
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: category.color }}
-                          />
-                          <span>{category.topicCount} คำตอบ</span>
-                        </div>
-                      </div>
-                    </div>
-                  </AnimatedCard>
-                </Link>
-              </animated.div>
-            );
-          })}
+          {categories.map((category, index) => (
+            <CategoryItemCard
+              key={category.id}
+              category={category}
+              index={index}
+              isLoaded={isLoaded}
+            />
+          ))}
         </div>
 
         {/* View all link */}
@@ -270,12 +234,7 @@ function FeaturedTopicsSection({
   topics: any[];
   isLoaded: boolean;
 }) {
-  const trail = useTrail(topics.length, {
-    opacity: isLoaded ? 1 : 0,
-    y: isLoaded ? 0 : 30,
-    config: { tension: 200, friction: 25 },
-    delay: 700,
-  });
+  // No longer using useTrail to avoid "Maximum call stack size exceeded"
 
   const getSeverityBadge = (level: string) => {
     switch (level) {
@@ -308,65 +267,14 @@ function FeaturedTopicsSection({
 
         {/* Topics grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {trail.map((spring, index) => {
-            const topic = topics[index];
-            const severity = getSeverityBadge(topic.severityLevel);
-
-            return (
-              <animated.div key={topic.id} style={spring}>
-                <Link href={`/topics/${topic.slug}`}>
-                  <AnimatedCard className="p-6 h-full" variant="elevated">
-                    {/* Header */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-2">
-                        <span className={`px-2.5 py-0.5 text-xs font-medium rounded-full ${severity.class}`}>
-                          {severity.label}
-                        </span>
-                        {topic.isVerified && (
-                          <span className="text-primary text-sm" title="ได้รับการยืนยัน">
-                            ✓
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-1 text-xs text-muted">
-                        <span>👁</span>
-                        <span>{topic.viewCount.toLocaleString()}</span>
-                      </div>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="font-semibold text-lg text-foreground mb-2 line-clamp-2">
-                      {topic.title}
-                    </h3>
-
-                    {/* Arabic title */}
-                    {topic.titleArabic && (
-                      <p className="arabic-text text-sm text-muted mb-3">
-                        {topic.titleArabic}
-                      </p>
-                    )}
-
-                    {/* Short answer preview */}
-                    <p className="text-sm text-muted line-clamp-3 mb-4">
-                      {topic.shortAnswer}
-                    </p>
-
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-2">
-                      {topic.tags.slice(0, 3).map((tag: string) => (
-                        <span
-                          key={tag}
-                          className="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-800 text-muted rounded"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  </AnimatedCard>
-                </Link>
-              </animated.div>
-            );
-          })}
+          {topics.map((topic, index) => (
+            <TopicItemCard
+              key={topic.id}
+              topic={topic}
+              index={index}
+              isLoaded={isLoaded}
+            />
+          ))}
         </div>
 
         {/* View all link */}
@@ -522,5 +430,154 @@ function CTASection({ isLoaded }: { isLoaded: boolean }) {
         </div>
       </div>
     </animated.section>
+  );
+}
+
+/**
+ * Sub-component for individual category card animation
+ */
+function CategoryItemCard({
+  category,
+  index,
+  isLoaded,
+}: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  category: any;
+  index: number;
+  isLoaded: boolean;
+}) {
+  const spring = useSpring({
+    opacity: isLoaded ? 1 : 0,
+    y: isLoaded ? 0 : 30,
+    delay: 500 + index * 50,
+    config: { tension: 200, friction: 25 },
+  });
+
+  return (
+    <animated.div style={spring}>
+      <Link href={`/categories/${category.slug}`}>
+        <AnimatedCard className="p-6 h-full" variant="bordered">
+          <div className="flex items-start gap-4">
+            <div
+              className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl"
+              style={{ backgroundColor: `${category.color}20` }}
+            >
+              {category.icon}
+            </div>
+            <div className="flex-1">
+              <h3 className="font-semibold text-lg text-foreground mb-1">
+                {category.name}
+              </h3>
+              {category.nameArabic && (
+                <p className="arabic-text text-sm text-muted mb-2">
+                  {category.nameArabic}
+                </p>
+              )}
+              <p className="text-sm text-muted line-clamp-2">
+                {category.description}
+              </p>
+              <div className="flex items-center gap-2 mt-3 text-xs text-muted">
+                <span
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: category.color }}
+                />
+                <span>{category.topicCount} คำตอบ</span>
+              </div>
+            </div>
+          </div>
+        </AnimatedCard>
+      </Link>
+    </animated.div>
+  );
+}
+
+/**
+ * Sub-component for individual topic card animation
+ */
+function TopicItemCard({
+  topic,
+  index,
+  isLoaded,
+}: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  topic: any;
+  index: number;
+  isLoaded: boolean;
+}) {
+  const spring = useSpring({
+    opacity: isLoaded ? 1 : 0,
+    y: isLoaded ? 0 : 30,
+    delay: 700 + index * 50,
+    config: { tension: 200, friction: 25 },
+  });
+
+  const getSeverityBadge = (level: string) => {
+    switch (level) {
+      case 'basic':
+        return { label: 'พื้นฐาน', class: 'badge-basic' };
+      case 'intermediate':
+        return { label: 'ปานกลาง', class: 'badge-intermediate' };
+      case 'advanced':
+        return { label: 'ขั้นสูง', class: 'badge-advanced' };
+      default:
+        return { label: level, class: 'badge-basic' };
+    }
+  };
+
+  const severity = getSeverityBadge(topic.severityLevel);
+
+  return (
+    <animated.div style={spring}>
+      <Link href={`/topics/${topic.slug}`}>
+        <AnimatedCard className="p-6 h-full" variant="elevated">
+          {/* Header */}
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <span className={`px-2.5 py-0.5 text-xs font-medium rounded-full ${severity.class}`}>
+                {severity.label}
+              </span>
+              {topic.isVerified && (
+                <span className="text-primary text-sm" title="ได้รับการยืนยัน">
+                  ✓
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-1 text-xs text-muted">
+              <span>👁</span>
+              <span>{topic.viewCount.toLocaleString()}</span>
+            </div>
+          </div>
+
+          {/* Title */}
+          <h3 className="font-semibold text-lg text-foreground mb-2 line-clamp-2">
+            {topic.title}
+          </h3>
+
+          {/* Arabic title */}
+          {topic.titleArabic && (
+            <p className="arabic-text text-sm text-muted mb-3">
+              {topic.titleArabic}
+            </p>
+          )}
+
+          {/* Short answer preview */}
+          <p className="text-sm text-muted line-clamp-3 mb-4">
+            {topic.shortAnswer}
+          </p>
+
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2">
+            {topic.tags.slice(0, 3).map((tag: string) => (
+              <span
+                key={tag}
+                className="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-800 text-muted rounded"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        </AnimatedCard>
+      </Link>
+    </animated.div>
   );
 }
