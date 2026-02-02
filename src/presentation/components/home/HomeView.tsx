@@ -103,7 +103,7 @@ function HeroSection({
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Arabic Bismillah */}
         <animated.div style={arabicSpring} className="mb-6">
-          <p className="arabic-text text-2xl md:text-3xl text-gold dark:text-gold-light font-medium">
+          <p className="arabic-text text-center text-2xl md:text-3xl text-gold dark:text-gold-light font-medium">
             بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
           </p>
         </animated.div>
@@ -400,7 +400,7 @@ function CTASection({ isLoaded }: { isLoaded: boolean }) {
 
         {/* Quote */}
         <div className="mb-8">
-          <p className="arabic-text text-2xl md:text-3xl text-primary mb-4">
+          <p className="arabic-text text-center text-2xl md:text-3xl text-primary mb-4">
             الحق أحق أن يتبع
           </p>
           <p className="text-lg text-muted italic">

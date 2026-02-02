@@ -44,7 +44,7 @@ export function AboutView() {
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
               เกี่ยวกับ Haqq Vault
             </h1>
-            <p className="arabic-text text-xl text-muted mb-2">حق والٹ</p>
+            <p className="arabic-text text-center text-xl text-muted mb-2">حق والٹ</p>
             <p className="text-muted text-lg">คลังคำตอบชุบฮาต</p>
           </animated.div>
 
@@ -138,7 +138,7 @@ export function AboutView() {
             <section className="text-center py-8">
               <div className="inline-block">
                 <AnimatedIslamicPattern type="star" size="sm" color="gold" className="mx-auto mb-4" />
-                <p className="arabic-text text-2xl md:text-3xl text-primary mb-3">
+                <p className="arabic-text text-center text-2xl md:text-3xl text-primary mb-3">
                   وَقُلْ جَاءَ الْحَقُّ وَزَهَقَ الْبَاطِلُ ۚ إِنَّ الْبَاطِلَ كَانَ زَهُوقًا
                 </p>
                 <p className="text-muted italic">

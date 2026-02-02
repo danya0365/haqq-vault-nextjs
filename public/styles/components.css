@@ -147,7 +147,6 @@
   .arabic-text {
     font-family: var(--font-arabic), serif;
     direction: rtl;
-    text-align: right;
   }
 
   /* Severity badges */
