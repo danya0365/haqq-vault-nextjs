@@ -2,13 +2,14 @@
 
 /**
  * MainHeader
- * Header component with Islamic-themed design, navigation, and theme toggle
+ * Header component with Islamic-themed design, navigation, theme toggle, and auth menu
  */
 
+import { useAuthStore } from '@/src/infrastructure/stores/authStore';
 import { ThemeToggle } from '@/src/presentation/components/common/ThemeToggle';
 import { animated, useSpring } from '@react-spring/web';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface NavLink {
   href: string;
@@ -25,9 +26,12 @@ const NAV_LINKS: NavLink[] = [
 ];
 
 export function MainHeader() {
+  const { user, isAuthenticated, logout } = useAuthStore();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   // Handle scroll effect
   useEffect(() => {
@@ -37,6 +41,18 @@ export function MainHeader() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   // Header animation on scroll
@@ -57,6 +73,29 @@ export function MainHeader() {
     opacity: isMobileMenuOpen ? 1 : 0,
     config: { tension: 280, friction: 24 },
   });
+
+  // User menu animation
+  const userMenuSpring = useSpring({
+    opacity: isUserMenuOpen ? 1 : 0,
+    transform: isUserMenuOpen ? 'translateY(0) scale(1)' : 'translateY(-10px) scale(0.95)',
+    config: { tension: 300, friction: 25 },
+  });
+
+  const handleLogout = () => {
+    logout();
+    setIsUserMenuOpen(false);
+  };
+
+  const getRoleBadgeColor = (role: string) => {
+    switch (role) {
+      case 'admin':
+        return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
+      case 'scholar':
+        return 'bg-gold/20 text-gold-dark dark:text-gold';
+      default:
+        return 'bg-primary/10 text-primary';
+    }
+  };
 
   return (
     <>
@@ -101,6 +140,116 @@ export function MainHeader() {
             {/* Right side */}
             <div className="flex items-center gap-3">
               <ThemeToggle />
+
+              {/* Auth Section */}
+              {isAuthenticated && user ? (
+                <div className="relative" ref={userMenuRef}>
+                  {/* User Avatar Button */}
+                  <button
+                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                    className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
+                      <span className="text-sm text-white font-medium">
+                        {user.name?.charAt(0).toUpperCase() || '👤'}
+                      </span>
+                    </div>
+                    <span className="hidden lg:block text-sm font-medium text-foreground max-w-[100px] truncate">
+                      {user.name}
+                    </span>
+                    <span className="hidden lg:block text-muted text-xs">
+                      {isUserMenuOpen ? '▲' : '▼'}
+                    </span>
+                  </button>
+
+                  {/* User Dropdown Menu */}
+                  {isUserMenuOpen && (
+                    <animated.div
+                      style={userMenuSpring}
+                      className="absolute right-0 top-full mt-2 w-64 bg-surface dark:bg-surface border border-border rounded-2xl shadow-xl overflow-hidden"
+                    >
+                      {/* User Info */}
+                      <div className="p-4 border-b border-border bg-gray-50 dark:bg-gray-800/50">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
+                            <span className="text-lg text-white font-medium">
+                              {user.name?.charAt(0).toUpperCase() || '👤'}
+                            </span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-foreground truncate">{user.name}</p>
+                            <p className="text-xs text-muted truncate">{user.email}</p>
+                            <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded-full ${getRoleBadgeColor(user.role)}`}>
+                              {user.role === 'admin' ? 'ผู้ดูแล' : user.role === 'scholar' ? 'นักวิชาการ' : 'สมาชิก'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Menu Items */}
+                      <div className="py-2">
+                        <Link
+                          href="/profile"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        >
+                          <span>👤</span>
+                          <span>โปรไฟล์ของฉัน</span>
+                        </Link>
+
+                        {/* Admin Link */}
+                        {user.role === 'admin' && (
+                          <Link
+                            href="/admin"
+                            onClick={() => setIsUserMenuOpen(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                          >
+                            <span>⚙️</span>
+                            <span>จัดการระบบ</span>
+                          </Link>
+                        )}
+
+                        {/* Scholar Link */}
+                        {(user.role === 'scholar' || user.role === 'admin') && (
+                          <Link
+                            href="/contribute"
+                            onClick={() => setIsUserMenuOpen(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                          >
+                            <span>✍️</span>
+                            <span>เพิ่มคำตอบ</span>
+                          </Link>
+                        )}
+
+                        <div className="border-t border-border my-2" />
+
+                        <button
+                          onClick={handleLogout}
+                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                        >
+                          <span>🚪</span>
+                          <span>ออกจากระบบ</span>
+                        </button>
+                      </div>
+                    </animated.div>
+                  )}
+                </div>
+              ) : (
+                <div className="hidden sm:flex items-center gap-2">
+                  <Link
+                    href="/auth/login"
+                    className="px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
+                  >
+                    เข้าสู่ระบบ
+                  </Link>
+                  <Link
+                    href="/auth/register"
+                    className="px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-xl transition-colors"
+                  >
+                    สมัครสมาชิก
+                  </Link>
+                </div>
+              )}
               
               {/* Mobile menu button */}
               <button
@@ -147,6 +296,56 @@ export function MainHeader() {
                 <span className="font-medium text-foreground">{link.label}</span>
               </Link>
             ))}
+
+            {/* Mobile Auth Links */}
+            <div className="border-t border-border mt-4 pt-4">
+              {isAuthenticated && user ? (
+                <>
+                  <Link
+                    href="/profile"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/10 transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
+                      <span className="text-sm text-white">{user.name?.charAt(0).toUpperCase()}</span>
+                    </div>
+                    <div>
+                      <span className="font-medium text-foreground block">{user.name}</span>
+                      <span className="text-xs text-muted">ดูโปรไฟล์</span>
+                    </div>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                  >
+                    <span className="text-xl">🚪</span>
+                    <span className="font-medium">ออกจากระบบ</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/auth/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/10 transition-colors"
+                  >
+                    <span className="text-xl">🔑</span>
+                    <span className="font-medium text-foreground">เข้าสู่ระบบ</span>
+                  </Link>
+                  <Link
+                    href="/auth/register"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors"
+                  >
+                    <span className="text-xl">✨</span>
+                    <span className="font-medium text-primary">สมัครสมาชิก</span>
+                  </Link>
+                </>
+              )}
+            </div>
           </nav>
         </animated.div>
       </animated.header>
