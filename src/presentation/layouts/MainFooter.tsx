@@ -118,7 +118,7 @@ export function MainFooter() {
           {/* Bottom Section */}
           <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted text-center md:text-left">
-              © {new Date().getFullYear()} Haqq Vault. สงวนลิขสิทธิ์
+              © {new Date().getFullYear()} Haqq Vault. สงวนลิขสิทธิ์ (Demo Version)
             </p>
             
             <div className="flex items-center gap-4 text-sm text-muted">
