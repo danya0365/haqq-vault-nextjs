@@ -77,8 +77,8 @@ export function ContributeView() {
     delay: 150,
   });
 
-  const handleSubmit = async (e: React.FormEvent, isDraft = false) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent | React.MouseEvent, isDraft = false) => {
+    if (e) e.preventDefault();
     setIsSubmitting(true);
 
     // Simulate API call

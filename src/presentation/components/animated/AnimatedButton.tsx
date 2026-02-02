@@ -22,7 +22,7 @@ interface AnimatedButtonProps {
   /**
    * Click handler
    */
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   /**
    * Disabled state
    */

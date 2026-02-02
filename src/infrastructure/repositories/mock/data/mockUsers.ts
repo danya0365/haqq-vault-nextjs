@@ -13,7 +13,8 @@ export const MOCK_USERS: User[] = [
     name: 'ผู้ดูแลระบบ',
     role: 'admin',
     createdAt: '2024-01-01T00:00:00.000Z',
-    isEmailVerified: true,
+    isVerified: true,
+    updatedAt: '2024-01-01T00:00:00.000Z',
     bio: 'ผู้ดูแลระบบ Haqq Vault',
   },
   {
@@ -22,7 +23,8 @@ export const MOCK_USERS: User[] = [
     name: 'ดร.อับดุลเลาะห์',
     role: 'scholar',
     createdAt: '2024-01-15T00:00:00.000Z',
-    isEmailVerified: true,
+    isVerified: true,
+    updatedAt: '2024-01-15T00:00:00.000Z',
     bio: 'นักวิชาการอิสลามศึกษา ผู้เชี่ยวชาญด้านหะดีษ',
   },
   {
@@ -31,7 +33,8 @@ export const MOCK_USERS: User[] = [
     name: 'อุสตาซ มูฮัมหมัด',
     role: 'scholar',
     createdAt: '2024-02-01T00:00:00.000Z',
-    isEmailVerified: true,
+    isVerified: true,
+    updatedAt: '2024-02-01T00:00:00.000Z',
     bio: 'นักวิชาการด้านกฎหมายอิสลาม',
   },
   {
@@ -40,7 +43,8 @@ export const MOCK_USERS: User[] = [
     name: 'อาลี ผู้ใช้ทั่วไป',
     role: 'user',
     createdAt: '2024-03-01T00:00:00.000Z',
-    isEmailVerified: true,
+    isVerified: true,
+    updatedAt: '2024-03-01T00:00:00.000Z',
     bio: 'สมาชิกผู้สนใจศึกษาความรู้อิสลาม',
   },
   {
@@ -49,7 +53,8 @@ export const MOCK_USERS: User[] = [
     name: 'ฟาติมะห์',
     role: 'user',
     createdAt: '2024-03-10T00:00:00.000Z',
-    isEmailVerified: false,
+    isVerified: false,
+    updatedAt: '2024-03-10T00:00:00.000Z',
     bio: 'นักศึกษา',
   },
   {
@@ -58,8 +63,8 @@ export const MOCK_USERS: User[] = [
     name: 'อะฮ์หมัด',
     role: 'user',
     createdAt: '2024-03-15T00:00:00.000Z',
-    isEmailVerified: true,
-    bio: null,
+    isVerified: true,
+    updatedAt: '2024-03-15T00:00:00.000Z',
   },
 ];
 

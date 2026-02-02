@@ -75,7 +75,7 @@ export function TopicsView() {
     setSelectedSeverity('');
   };
 
-  const hasFilters = searchQuery || selectedCategory || selectedSeverity;
+  const hasFilters = !!(searchQuery || selectedCategory || selectedSeverity);
 
   return (
     <MainLayout>
