@@ -5,6 +5,7 @@
  * Main layout wrapper with Islamic-themed design
  */
 
+import { CookieConsentBanner } from '@/src/presentation/components/common/CookieConsentBanner';
 import { ReactNode } from 'react';
 import { MainFooter } from './MainFooter';
 import { MainHeader } from './MainHeader';
@@ -51,6 +52,9 @@ export function MainLayout({
 
       {/* Footer */}
       <MainFooter />
+
+      {/* Cookie Consent Banner */}
+      <CookieConsentBanner />
     </div>
   );
 }
