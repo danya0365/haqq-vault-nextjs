@@ -7,7 +7,7 @@
 
 import { animated, useSpring } from '@react-spring/web';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface FooterLink {
   href: string;
@@ -140,17 +140,23 @@ export function MainFooter() {
 // Animated Footer Link
 function AnimatedFooterLink({ link }: { link: FooterLink }) {
   const [isHovered, setIsHovered] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const spring = useSpring({
     x: isHovered ? 4 : 0,
     color: isHovered ? 'var(--color-primary)' : 'var(--color-muted)',
     config: { tension: 400, friction: 30 },
+    immediate: !isMounted,
   });
 
   return (
     <Link href={link.href}>
       <animated.span
-        style={spring}
+        style={isMounted ? spring : {}}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className="inline-block text-sm cursor-pointer transition-colors"
