@@ -3,11 +3,11 @@
 /**
  * MainHeader
  * Header component with Islamic-themed design, navigation, theme toggle, and auth menu
+ * Using Tailwind CSS for all animations (no react-spring)
  */
 
 import { useAuthStore } from '@/src/infrastructure/stores/authStore';
 import { ThemeToggle } from '@/src/presentation/components/common/ThemeToggle';
-import { animated, useSpring } from '@react-spring/web';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
@@ -30,7 +30,6 @@ export function MainHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
   // Handle scroll effect
@@ -55,32 +54,6 @@ export function MainHeader() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Header animation on scroll
-  const headerSpring = useSpring({
-    backgroundColor: isScrolled
-      ? 'rgba(255, 251, 245, 0.95)'
-      : 'rgba(255, 251, 245, 0)',
-    boxShadow: isScrolled
-      ? '0 4px 20px rgba(0, 0, 0, 0.08)'
-      : '0 0 0 rgba(0, 0, 0, 0)',
-    backdropFilter: isScrolled ? 'blur(12px)' : 'blur(0px)',
-    config: { tension: 300, friction: 30 },
-  });
-
-  // Mobile menu animation
-  const mobileMenuSpring = useSpring({
-    transform: isMobileMenuOpen ? 'translateY(0%)' : 'translateY(-100%)',
-    opacity: isMobileMenuOpen ? 1 : 0,
-    config: { tension: 280, friction: 24 },
-  });
-
-  // User menu animation
-  const userMenuSpring = useSpring({
-    opacity: isUserMenuOpen ? 1 : 0,
-    transform: isUserMenuOpen ? 'translateY(0) scale(1)' : 'translateY(-10px) scale(0.95)',
-    config: { tension: 300, friction: 25 },
-  });
-
   const handleLogout = () => {
     logout();
     setIsUserMenuOpen(false);
@@ -99,9 +72,12 @@ export function MainHeader() {
 
   return (
     <>
-      <animated.header
-        style={headerSpring}
-        className="fixed top-0 left-0 right-0 z-50 dark:bg-background/95"
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md transition-all duration-300 ${
+          isScrolled
+            ? 'bg-background/90 shadow-lg'
+            : 'bg-transparent'
+        }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
@@ -127,13 +103,7 @@ export function MainHeader() {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-1">
               {NAV_LINKS.map((link) => (
-                <AnimatedNavLink
-                  key={link.href}
-                  link={link}
-                  isHovered={hoveredLink === link.href}
-                  onHover={() => setHoveredLink(link.href)}
-                  onLeave={() => setHoveredLink(null)}
-                />
+                <NavItem key={link.href} link={link} />
               ))}
             </nav>
 
@@ -157,82 +127,83 @@ export function MainHeader() {
                     <span className="hidden lg:block text-sm font-medium text-foreground max-w-[100px] truncate">
                       {user.name}
                     </span>
-                    <span className="hidden lg:block text-muted text-xs">
-                      {isUserMenuOpen ? '▲' : '▼'}
+                    <span className="hidden lg:block text-muted text-xs transition-transform duration-200" style={{ transform: isUserMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                      ▼
                     </span>
                   </button>
 
                   {/* User Dropdown Menu */}
-                  {isUserMenuOpen && (
-                    <animated.div
-                      style={userMenuSpring}
-                      className="absolute right-0 top-full mt-2 w-64 bg-surface dark:bg-surface border border-border rounded-2xl shadow-xl overflow-hidden"
-                    >
-                      {/* User Info */}
-                      <div className="p-4 border-b border-border bg-gray-50 dark:bg-gray-800/50">
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
-                            <span className="text-lg text-white font-medium">
-                              {user.name?.charAt(0).toUpperCase() || '👤'}
-                            </span>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="font-medium text-foreground truncate">{user.name}</p>
-                            <p className="text-xs text-muted truncate">{user.email}</p>
-                            <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded-full ${getRoleBadgeColor(user.role)}`}>
-                              {user.role === 'admin' ? 'ผู้ดูแล' : user.role === 'scholar' ? 'นักวิชาการ' : 'สมาชิก'}
-                            </span>
-                          </div>
+                  <div
+                    className={`absolute right-0 top-full mt-2 w-64 bg-surface dark:bg-surface border border-border rounded-2xl shadow-xl overflow-hidden transition-all duration-200 origin-top-right ${
+                      isUserMenuOpen
+                        ? 'opacity-100 scale-100 visible'
+                        : 'opacity-0 scale-95 invisible'
+                    }`}
+                  >
+                    {/* User Info */}
+                    <div className="p-4 border-b border-border bg-gray-50 dark:bg-gray-800/50">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
+                          <span className="text-lg text-white font-medium">
+                            {user.name?.charAt(0).toUpperCase() || '👤'}
+                          </span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-foreground truncate">{user.name}</p>
+                          <p className="text-xs text-muted truncate">{user.email}</p>
+                          <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded-full ${getRoleBadgeColor(user.role)}`}>
+                            {user.role === 'admin' ? 'ผู้ดูแล' : user.role === 'scholar' ? 'นักวิชาการ' : 'สมาชิก'}
+                          </span>
                         </div>
                       </div>
+                    </div>
 
-                      {/* Menu Items */}
-                      <div className="py-2">
+                    {/* Menu Items */}
+                    <div className="py-2">
+                      <Link
+                        href="/profile"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                      >
+                        <span>👤</span>
+                        <span>โปรไฟล์ของฉัน</span>
+                      </Link>
+
+                      {/* Admin Link */}
+                      {user.role === 'admin' && (
                         <Link
-                          href="/profile"
+                          href="/admin"
                           onClick={() => setIsUserMenuOpen(false)}
                           className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                         >
-                          <span>👤</span>
-                          <span>โปรไฟล์ของฉัน</span>
+                          <span>⚙️</span>
+                          <span>จัดการระบบ</span>
                         </Link>
+                      )}
 
-                        {/* Admin Link */}
-                        {user.role === 'admin' && (
-                          <Link
-                            href="/admin"
-                            onClick={() => setIsUserMenuOpen(false)}
-                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                          >
-                            <span>⚙️</span>
-                            <span>จัดการระบบ</span>
-                          </Link>
-                        )}
-
-                        {/* Scholar Link */}
-                        {(user.role === 'scholar' || user.role === 'admin') && (
-                          <Link
-                            href="/contribute"
-                            onClick={() => setIsUserMenuOpen(false)}
-                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                          >
-                            <span>✍️</span>
-                            <span>เพิ่มคำตอบ</span>
-                          </Link>
-                        )}
-
-                        <div className="border-t border-border my-2" />
-
-                        <button
-                          onClick={handleLogout}
-                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                      {/* Scholar Link */}
+                      {(user.role === 'scholar' || user.role === 'admin') && (
+                        <Link
+                          href="/contribute"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                         >
-                          <span>🚪</span>
-                          <span>ออกจากระบบ</span>
-                        </button>
-                      </div>
-                    </animated.div>
-                  )}
+                          <span>✍️</span>
+                          <span>เพิ่มคำตอบ</span>
+                        </Link>
+                      )}
+
+                      <div className="border-t border-border my-2" />
+
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                      >
+                        <span>🚪</span>
+                        <span>ออกจากระบบ</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="hidden sm:flex items-center gap-2">
@@ -280,9 +251,12 @@ export function MainHeader() {
         </div>
 
         {/* Mobile Menu */}
-        <animated.div
-          style={mobileMenuSpring}
-          className="md:hidden absolute top-full left-0 right-0 bg-surface dark:bg-surface border-b border-border shadow-lg"
+        <div
+          className={`md:hidden absolute top-full left-0 right-0 bg-surface dark:bg-surface border-b border-border shadow-lg transition-all duration-300 ${
+            isMobileMenuOpen
+              ? 'opacity-100 translate-y-0 visible'
+              : 'opacity-0 -translate-y-4 invisible'
+          }`}
         >
           <nav className="py-4 px-4 space-y-1">
             {NAV_LINKS.map((link) => (
@@ -347,8 +321,8 @@ export function MainHeader() {
               )}
             </div>
           </nav>
-        </animated.div>
-      </animated.header>
+        </div>
+      </header>
 
       {/* Mobile menu overlay */}
       {isMobileMenuOpen && (
@@ -361,46 +335,19 @@ export function MainHeader() {
   );
 }
 
-// Animated Navigation Link
-function AnimatedNavLink({
-  link,
-  isHovered,
-  onHover,
-  onLeave,
-}: {
-  link: NavLink;
-  isHovered: boolean;
-  onHover: () => void;
-  onLeave: () => void;
-}) {
-  const spring = useSpring({
-    backgroundColor: isHovered ? 'rgba(5, 150, 105, 0.1)' : 'rgba(0, 0, 0, 0)',
-    scale: isHovered ? 1.02 : 1,
-    config: { tension: 400, friction: 30 },
-  });
-
-  const underlineSpring = useSpring({
-    width: isHovered ? '100%' : '0%',
-    config: { tension: 400, friction: 30 },
-  });
-
+// Navigation Item with Tailwind hover effects
+function NavItem({ link }: { link: NavLink }) {
   return (
-    <Link href={link.href}>
-      <animated.div
-        style={spring}
-        onMouseEnter={onHover}
-        onMouseLeave={onLeave}
-        className="relative px-4 py-2 rounded-lg cursor-pointer"
-      >
-        <span className="flex items-center gap-2 text-sm font-medium text-foreground">
-          <span>{link.icon}</span>
-          <span>{link.label}</span>
-        </span>
-        <animated.div
-          style={underlineSpring}
-          className="absolute bottom-1 left-4 right-4 h-0.5 bg-primary rounded-full"
-        />
-      </animated.div>
+    <Link
+      href={link.href}
+      className="group relative px-4 py-2 rounded-lg hover:bg-primary/10 transition-all duration-200"
+    >
+      <span className="flex items-center gap-2 text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+        <span>{link.icon}</span>
+        <span>{link.label}</span>
+      </span>
+      {/* Underline on hover */}
+      <span className="absolute bottom-1 left-4 right-4 h-0.5 bg-primary rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left" />
     </Link>
   );
 }
