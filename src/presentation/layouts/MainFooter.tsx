@@ -45,6 +45,9 @@ const FOOTER_SECTIONS = {
 };
 
 export function MainFooter() {
+    const version = process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0';
+  const commitSha = process.env.NEXT_PUBLIC_COMMIT_SHA || '';
+  const shortSha = commitSha.slice(0, 7);
   return (
     <footer className="relative overflow-hidden">
       {/* Islamic Pattern Background */}
@@ -117,9 +120,18 @@ export function MainFooter() {
 
           {/* Bottom Section */}
           <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-muted text-center md:text-left">
+            {/* <p className="text-sm text-muted text-center md:text-left">
               © {new Date().getFullYear()} Haqq Vault. สงวนลิขสิทธิ์
-            </p>
+            </p> */}
+
+                  {/* Copyright */}
+      <div className="flex items-center gap-2 text-xs md:text-sm text-muted overflow-hidden">
+        <span className="whitespace-nowrap">© {new Date().getFullYear()}</span>
+        <span className="font-semibold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent cursor-default truncate">
+          Haqq Vault
+        </span>
+        <span className="whitespace-nowrap">v{version} {shortSha && `(${shortSha})`}</span>
+      </div>
             
             <div className="flex items-center gap-4 text-sm text-muted">
               <Link href="/privacy" className="hover:text-primary transition-colors">
