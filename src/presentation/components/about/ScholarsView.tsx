@@ -5,6 +5,7 @@
  * Page displaying the scholar team
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
 import { MainLayout } from '@/src/presentation/layouts/MainLayout';
@@ -41,7 +42,7 @@ const SCHOLARS: Scholar[] = [
   {
     id: '3',
     name: 'ดร.ฟาติมะห์',
-    nameArabic: 'د. فاطمة',
+    nameArabic: 'ด. فاطمة',
     title: 'ผู้เชี่ยวชาญด้านประวัติศาสตร์อิสลาม',
     specialization: 'ประวัติศาสตร์และสตรีในอิสลาม',
     bio: 'จบการศึกษาด้านประวัติศาสตร์อิสลามจากมหาวิทยาลัยในจอร์แดน มีงานเขียนหลายเล่มเกี่ยวกับบทบาทของสตรีในอิสลาม',
@@ -81,10 +82,10 @@ export function ScholarsView() {
               <AnimatedIslamicPattern type="octagon" size="md" color="gold" animation="pulse" />
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              🎓 ทีมนักวิชาการ
+              {UI_CONFIG.scholarsTitle}
             </h1>
             <p className="text-muted max-w-2xl mx-auto text-lg">
-              บรรดานักวิชาการผู้ทรงคุณวุฒิที่ตรวจสอบและรับรองความถูกต้องของคำตอบ
+              {UI_CONFIG.scholarsDescription}
             </p>
           </animated.div>
 
@@ -104,7 +105,7 @@ export function ScholarsView() {
           <animated.div style={headerSpring} className="mt-12 text-center">
             <div className="bg-primary/5 dark:bg-primary/10 rounded-xl p-6 border border-primary/20">
               <p className="text-muted">
-                <span className="text-primary">✓</span> ทุกคำตอบจะผ่านการตรวจสอบจากนักวิชาการก่อนเผยแพร่
+                <span className="text-primary">✓</span> {UI_CONFIG.labels.scholarVerificationNote}
               </p>
             </div>
           </animated.div>

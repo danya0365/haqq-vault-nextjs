@@ -1,3 +1,4 @@
+import { SITE_CONFIG } from '@/src/config/site.config';
 import { MOCK_TOPICS } from "@/src/infrastructure/repositories/mock/data/mockData";
 import { TopicDetailView } from "@/src/presentation/components/topics/TopicDetailView";
 import type { Metadata } from "next";
@@ -15,7 +16,7 @@ export async function generateMetadata({
 
   if (!topic) {
     return {
-      title: "ไม่พบคำตอบ | Haqq Vault",
+      title: SITE_CONFIG.metadata.notFound.title,
     };
   }
 

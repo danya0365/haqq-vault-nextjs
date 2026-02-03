@@ -5,6 +5,8 @@
  * Contact page with form and information
  */
 
+import { SITE_CONFIG } from '@/src/config/site.config';
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
@@ -52,26 +54,7 @@ export function ContactView() {
     setFormData({ name: '', email: '', subject: '', message: '' });
   };
 
-  const contactMethods = [
-    {
-      icon: '📧',
-      title: 'อีเมล',
-      value: 'contact@haqqvault.com',
-      href: 'mailto:contact@haqqvault.com',
-    },
-    {
-      icon: '💬',
-      title: 'Facebook',
-      value: 'Haqq Vault',
-      href: '#',
-    },
-    {
-      icon: '📱',
-      title: 'Twitter / X',
-      value: '@HaqqVault',
-      href: '#',
-    },
-  ];
+  const contactMethods = SITE_CONFIG.contact.methods;
 
   return (
     <MainLayout>
@@ -83,10 +66,10 @@ export function ContactView() {
               <AnimatedIslamicPattern type="arabesque" size="md" color="primary" animation="float" />
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              💬 ติดต่อเรา
+              💬 {UI_CONFIG.labels.contactTitle}
             </h1>
             <p className="text-muted max-w-2xl mx-auto text-lg">
-              มีคำถาม ข้อเสนอแนะ หรือต้องการส่งคำถามใหม่? ติดต่อเราได้ที่นี่
+              {UI_CONFIG.labels.contactDesc}
             </p>
           </animated.div>
 
@@ -99,28 +82,28 @@ export function ContactView() {
                     <div className="text-center py-12">
                       <div className="text-6xl mb-4">✅</div>
                       <h3 className="text-2xl font-bold text-foreground mb-2">
-                        ส่งข้อความสำเร็จ!
+                        {UI_CONFIG.labels.submitSuccess}
                       </h3>
                       <p className="text-muted mb-6">
-                        ขอบคุณที่ติดต่อเรา เราจะตอบกลับโดยเร็วที่สุด
+                        {UI_CONFIG.labels.submitSuccessDesc}
                       </p>
                       <AnimatedButton
                         variant="outline"
                         onClick={() => setIsSubmitted(false)}
                       >
-                        ส่งข้อความอีกครั้ง
+                        {UI_CONFIG.labels.sendAgain}
                       </AnimatedButton>
                     </div>
                   ) : (
                     <form onSubmit={handleSubmit} className="space-y-6">
                       <h2 className="text-xl font-bold text-foreground mb-4">
-                        ส่งข้อความถึงเรา
+                        {UI_CONFIG.labels.sendMessageTitle}
                       </h2>
 
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-foreground mb-2">
-                            ชื่อ *
+                            {UI_CONFIG.labels.labelName}
                           </label>
                           <input
                             type="text"
@@ -130,12 +113,12 @@ export function ContactView() {
                               setFormData({ ...formData, name: e.target.value })
                             }
                             className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                            placeholder="ชื่อของคุณ"
+                            placeholder={UI_CONFIG.placeholders.yourName}
                           />
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-foreground mb-2">
-                            อีเมล *
+                            {UI_CONFIG.labels.labelEmail}
                           </label>
                           <input
                             type="email"
@@ -145,14 +128,14 @@ export function ContactView() {
                               setFormData({ ...formData, email: e.target.value })
                             }
                             className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                            placeholder="email@example.com"
+                            placeholder="cleancode1986@gmail.com"
                           />
                         </div>
                       </div>
 
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                          หัวข้อ *
+                          {UI_CONFIG.labels.labelSubject}
                         </label>
                         <select
                           required
@@ -162,18 +145,18 @@ export function ContactView() {
                           }
                           className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                         >
-                          <option value="">เลือกหัวข้อ</option>
-                          <option value="question">ส่งคำถามใหม่</option>
-                          <option value="correction">แจ้งข้อผิดพลาด</option>
-                          <option value="suggestion">ข้อเสนอแนะ</option>
-                          <option value="collaboration">ร่วมมือกับเรา</option>
-                          <option value="other">อื่นๆ</option>
+                          <option value="">{UI_CONFIG.labels.chooseSubject}</option>
+                          <option value="question">{UI_CONFIG.labels.subjectQuestion}</option>
+                          <option value="correction">{UI_CONFIG.labels.subjectCorrection}</option>
+                          <option value="suggestion">{UI_CONFIG.labels.subjectSuggestion}</option>
+                          <option value="collaboration">{UI_CONFIG.labels.subjectCollaboration}</option>
+                          <option value="other">{UI_CONFIG.labels.subjectOther}</option>
                         </select>
                       </div>
 
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                          ข้อความ *
+                          {UI_CONFIG.labels.labelMessage}
                         </label>
                         <textarea
                           required
@@ -183,7 +166,7 @@ export function ContactView() {
                             setFormData({ ...formData, message: e.target.value })
                           }
                           className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none"
-                          placeholder="รายละเอียดข้อความของคุณ..."
+                          placeholder={UI_CONFIG.placeholders.messageDetails}
                         />
                       </div>
 
@@ -193,7 +176,7 @@ export function ContactView() {
                         size="lg"
                         disabled={isSubmitting}
                       >
-                        {isSubmitting ? 'กำลังส่ง...' : 'ส่งข้อความ'}
+                        {isSubmitting ? UI_CONFIG.labels.sending : UI_CONFIG.labels.sendMessage}
                       </AnimatedButton>
                     </form>
                   )}
@@ -204,18 +187,18 @@ export function ContactView() {
               <div className="space-y-6">
                 <AnimatedCard className="p-6" variant="bordered">
                   <h3 className="font-semibold text-foreground mb-4">
-                    ช่องทางติดต่อ
+                    {UI_CONFIG.labels.contactChannels}
                   </h3>
                   <div className="space-y-4">
                     {contactMethods.map((method) => (
                       <a
-                        key={method.title}
+                        key={method.label}
                         href={method.href}
                         className="flex items-center gap-3 text-muted hover:text-primary transition-colors"
                       >
                         <span className="text-xl">{method.icon}</span>
                         <div>
-                          <div className="text-xs text-muted">{method.title}</div>
+                          <div className="text-xs text-muted">{method.label}</div>
                           <div className="text-sm font-medium text-foreground">
                             {method.value}
                           </div>
@@ -227,23 +210,23 @@ export function ContactView() {
 
                 <AnimatedCard className="p-6" variant="bordered">
                   <h3 className="font-semibold text-foreground mb-4">
-                    ส่งคำถามใหม่
+                    {UI_CONFIG.labels.sendNewQuestion}
                   </h3>
                   <p className="text-sm text-muted mb-4">
-                    หากคุณมีคำถามหรือพบข้อกล่าวหาที่ยังไม่มีคำตอบ สามารถส่งให้เราพิจารณาได้
+                    {UI_CONFIG.labels.sendNewQuestionDesc}
                   </p>
                   <ul className="text-sm text-muted space-y-2">
                     <li className="flex items-start gap-2">
                       <span className="text-primary">•</span>
-                      <span>ระบุคำถามหรือข้อกล่าวหาให้ชัดเจน</span>
+                      <span>{UI_CONFIG.labels.instructionClearQuestion}</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-primary">•</span>
-                      <span>แนบแหล่งที่มา (ถ้ามี)</span>
+                      <span>{UI_CONFIG.labels.instructionAttachSource}</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-primary">•</span>
-                      <span>เราจะพิจารณาและตอบกลับ</span>
+                      <span>{UI_CONFIG.labels.instructionResponse}</span>
                     </li>
                   </ul>
                 </AnimatedCard>
@@ -251,12 +234,12 @@ export function ContactView() {
                 {/* Arabic Quote */}
                 <div className="text-center p-6 bg-primary/5 dark:bg-primary/10 rounded-xl border border-primary/20">
                   <p className="arabic-text text-lg text-primary mb-2">
-                    ادْعُ إِلَى سَبِيلِ رَبِّكَ بِالْحِكْمَةِ وَالْمَوْعِظَةِ الْحَسَنَةِ
+                    {UI_CONFIG.labels.contactQuote.arabic}
                   </p>
                   <p className="text-xs text-muted italic">
-                    "จงเชิญชวนสู่ทางของพระผู้อภิบาลของเจ้าด้วยวิทยปัญญาและการตักเตือนที่ดี"
+                    {UI_CONFIG.labels.contactQuote.thai}
                   </p>
-                  <p className="text-xs text-muted mt-1">- ซูเราะฮ์อันนะฮ์ล 16:125</p>
+                  <p className="text-xs text-muted mt-1">{UI_CONFIG.labels.contactQuote.source}</p>
                 </div>
               </div>
             </div>

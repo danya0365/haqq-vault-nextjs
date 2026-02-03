@@ -5,6 +5,7 @@
  * Page explaining the methodology for answering questions
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
 import { MainLayout } from '@/src/presentation/layouts/MainLayout';
@@ -87,10 +88,10 @@ export function MethodologyView() {
               <AnimatedIslamicPattern type="star" size="md" color="primary" animation="rotate" />
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              📋 หลักการตอบคำถาม
+              {UI_CONFIG.methodologyTitle}
             </h1>
             <p className="text-muted max-w-2xl mx-auto text-lg">
-              วิธีการที่เราใช้ในการตอบคำถามและข้อกล่าวหาอย่างเป็นระบบ
+              {UI_CONFIG.methodologyDescription}
             </p>
           </animated.div>
 
@@ -98,7 +99,7 @@ export function MethodologyView() {
           <animated.div style={contentSpring} className="mb-12">
             <div className="bg-primary/5 dark:bg-primary/10 rounded-2xl border border-primary/20 p-6 md:p-8">
               <h2 className="text-xl font-bold text-foreground mb-4">
-                หลักการพื้นฐาน
+                {UI_CONFIG.labels.basicMethodology}
               </h2>
               <ul className="space-y-3 text-muted-dark dark:text-muted">
                 <li className="flex items-start gap-3">
@@ -128,7 +129,7 @@ export function MethodologyView() {
           {/* Process Steps */}
           <animated.div style={contentSpring}>
             <h2 className="text-2xl font-bold text-foreground mb-6 text-center">
-              ขั้นตอนการทำงาน
+              {UI_CONFIG.labels.workProcess}
             </h2>
             <div className="relative">
               {/* Timeline line */}
@@ -161,7 +162,7 @@ export function MethodologyView() {
           {/* Evidence Types */}
           <animated.div style={contentSpring} className="mt-12">
             <h2 className="text-2xl font-bold text-foreground mb-6 text-center">
-              ประเภทหลักฐานที่ใช้
+              {UI_CONFIG.labels.evidenceTypes}
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
@@ -186,11 +187,11 @@ export function MethodologyView() {
           {/* CTA */}
           <animated.div style={contentSpring} className="mt-12 text-center">
             <p className="text-muted mb-6">
-              มีคำถามเกี่ยวกับหลักการของเรา?
+                {UI_CONFIG.labels.methodologyCTA}
             </p>
             <Link href="/contact">
               <AnimatedButton variant="primary" size="lg">
-                ติดต่อเรา
+                {UI_CONFIG.labels.contactUs}
               </AnimatedButton>
             </Link>
           </animated.div>

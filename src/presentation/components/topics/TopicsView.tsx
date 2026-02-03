@@ -5,6 +5,7 @@
  * Topics listing page with search, filter, and pagination
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import type { SeverityLevel, Topic } from '@/src/domain/types/topic';
 import { MOCK_CATEGORIES, MOCK_TOPICS } from '@/src/infrastructure/repositories/mock/data/mockData';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
@@ -86,12 +87,11 @@ export function TopicsView() {
             <div className="flex items-center gap-3 mb-4">
               <span className="text-3xl">📚</span>
               <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-                คำตอบทั้งหมด
+                {UI_CONFIG.labels.allTopics}
               </h1>
             </div>
             <p className="text-muted max-w-2xl">
-              รวบรวมคำตอบสำหรับข้อกล่าวหาและข้อสงสัยเกี่ยวกับอิสลาม
-              พร้อมหลักฐานจากอัลกุรอาน หะดีษ และนักวิชาการ
+              {UI_CONFIG.labels.allTopicsDesc}
             </p>
           </animated.div>
 
@@ -106,7 +106,7 @@ export function TopicsView() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="ค้นหาคำตอบ..."
+                placeholder={UI_CONFIG.placeholders.topicsSearch}
                 className="w-full px-4 py-3 pl-12 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
               />
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted">
@@ -130,7 +130,7 @@ export function TopicsView() {
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="px-4 py-2 rounded-lg bg-background border border-border focus:border-primary outline-none text-sm"
               >
-                <option value="">ทุกหมวดหมู่</option>
+                <option value="">{UI_CONFIG.allCategories}</option>
                 {MOCK_CATEGORIES.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.icon} {cat.name}
@@ -144,10 +144,10 @@ export function TopicsView() {
                 onChange={(e) => setSelectedSeverity(e.target.value as SeverityLevel | '')}
                 className="px-4 py-2 rounded-lg bg-background border border-border focus:border-primary outline-none text-sm"
               >
-                <option value="">ทุกระดับ</option>
-                <option value="basic">🟢 พื้นฐาน</option>
-                <option value="intermediate">🟡 ปานกลาง</option>
-                <option value="advanced">🔴 ขั้นสูง</option>
+                <option value="">{UI_CONFIG.allLevels}</option>
+                <option value="basic">🟢 {UI_CONFIG.severity.basic}</option>
+                <option value="intermediate">🟡 {UI_CONFIG.severity.intermediate}</option>
+                <option value="advanced">🔴 {UI_CONFIG.severity.advanced}</option>
               </select>
 
               {/* Sort */}
@@ -156,8 +156,8 @@ export function TopicsView() {
                 onChange={(e) => setSortBy(e.target.value as 'newest' | 'popular')}
                 className="px-4 py-2 rounded-lg bg-background border border-border focus:border-primary outline-none text-sm"
               >
-                <option value="newest">🕐 ใหม่ล่าสุด</option>
-                <option value="popular">🔥 ยอดนิยม</option>
+                <option value="newest">🕐 {UI_CONFIG.sortByNewest}</option>
+                <option value="popular">🔥 {UI_CONFIG.sortByPopularSymbol}</option>
               </select>
 
               {/* Clear filters */}
@@ -166,7 +166,7 @@ export function TopicsView() {
                   onClick={clearFilters}
                   className="px-4 py-2 rounded-lg text-sm text-primary hover:bg-primary/10 transition-colors"
                 >
-                  ล้างตัวกรอง
+                  {UI_CONFIG.clearFilters}
                 </button>
               )}
             </div>
@@ -174,7 +174,7 @@ export function TopicsView() {
 
           {/* Results count */}
           <div className="mb-6 text-sm text-muted">
-            พบ {filteredTopics.length} คำตอบ
+            {UI_CONFIG.labels.foundResults} {filteredTopics.length} {UI_CONFIG.labels.resultsCountSuffix}
           </div>
 
           {/* Topics Grid */}
@@ -220,11 +220,11 @@ function TopicCard({
   const getSeverityBadge = (level: SeverityLevel) => {
     switch (level) {
       case 'basic':
-        return { label: 'พื้นฐาน', class: 'badge-basic', icon: '🟢' };
+        return { label: UI_CONFIG.severity.basic, class: 'badge-basic', icon: '🟢' };
       case 'intermediate':
-        return { label: 'ปานกลาง', class: 'badge-intermediate', icon: '🟡' };
+        return { label: UI_CONFIG.severity.intermediate, class: 'badge-intermediate', icon: '🟡' };
       case 'advanced':
-        return { label: 'ขั้นสูง', class: 'badge-advanced', icon: '🔴' };
+        return { label: UI_CONFIG.severity.advanced, class: 'badge-advanced', icon: '🔴' };
     }
   };
 
@@ -253,7 +253,7 @@ function TopicCard({
             </span>
           </div>
           {topic.isVerified && (
-            <span className="text-primary text-lg" title="ได้รับการยืนยัน">
+            <span className="text-primary text-lg" title={UI_CONFIG.labels.verified}>
               ✓
             </span>
           )}
@@ -322,12 +322,12 @@ function EmptyState({
     <div className="text-center py-16">
       <div className="text-6xl mb-4">🔍</div>
       <h3 className="text-xl font-semibold text-foreground mb-2">
-        ไม่พบคำตอบ
+        {UI_CONFIG.labels.noAnswersFoundStatus}
       </h3>
       <p className="text-muted mb-6 max-w-md mx-auto">
         {hasFilters
-          ? 'ลองเปลี่ยนคำค้นหาหรือตัวกรองเพื่อดูผลลัพธ์เพิ่มเติม'
-          : 'ยังไม่มีคำตอบในระบบ'}
+          ? UI_CONFIG.labels.noAnswersFiltered
+          : UI_CONFIG.labels.noAnswersInSystem}
       </p>
       {hasFilters && (
         <AnimatedButton variant="outline" onClick={onClear}>

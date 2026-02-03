@@ -1,16 +1,21 @@
+import '@/public/styles/index.css';
+import { SITE_CONFIG } from '@/src/config/site.config';
 import { ThemeProvider } from "@/src/presentation/providers/ThemeProvider";
-import type { Metadata } from "next";
-import "../public/styles/index.css";
+import type { Metadata } from 'next';
+import { Inter, Outfit } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit' });
 
 export const metadata: Metadata = {
-  title: "Haqq Vault | คลังคำตอบชุบฮาต",
-  description: "แหล่งรวบรวมคำตอบสำหรับข้อกล่าวหาและข้อสงสัยเกี่ยวกับอิสลาม โดยใช้หลักฐานจากอัลกุรอาน หะดีษ และความเห็นของบรรดานักวิชาการ",
-  keywords: ["อิสลาม", "คำตอบ", "ชุบฮาต", "อัลกุรอาน", "หะดีษ", "BurhanQA"],
+  title: SITE_CONFIG.metadata.home.title,
+  description: SITE_CONFIG.metadata.home.description,
+  keywords: [...SITE_CONFIG.keywords],
   openGraph: {
-    title: "Haqq Vault | คลังคำตอบชุบฮาต",
-    description: "แหล่งรวบรวมคำตอบสำหรับข้อกล่าวหาและข้อสงสัยเกี่ยวกับอิสลาม",
-    type: "website",
-    locale: "th_TH",
+    title: SITE_CONFIG.metadata.home.title,
+    description: SITE_CONFIG.metadata.home.description,
+    type: 'website',
+    siteName: SITE_CONFIG.name,
   },
 };
 

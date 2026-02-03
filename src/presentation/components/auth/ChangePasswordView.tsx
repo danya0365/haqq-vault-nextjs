@@ -5,6 +5,7 @@
  * Change password page (requires authentication)
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
 import { MainLayout } from '@/src/presentation/layouts/MainLayout';
@@ -97,7 +98,7 @@ export function ChangePasswordView() {
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <span className="animate-spin text-4xl inline-block mb-4">⏳</span>
-            <p className="text-muted">กำลังโหลด...</p>
+            <p className="text-muted">{UI_CONFIG.labels.loading}</p>
           </div>
         </div>
       </MainLayout>
@@ -114,7 +115,7 @@ export function ChangePasswordView() {
               <AnimatedIslamicPattern type="octagon" size="lg" color="primary" animation="pulse" />
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-              เปลี่ยนรหัสผ่าน
+              {UI_CONFIG.labels.changePassword}
             </h1>
             <p className="text-muted">เปลี่ยนรหัสผ่านเพื่อความปลอดภัย</p>
           </div>
@@ -149,7 +150,7 @@ export function ChangePasswordView() {
                   {/* Current Password */}
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
-                      รหัสผ่านปัจจุบัน
+                      {UI_CONFIG.placeholders.currentPassword}
                     </label>
                     <div className="relative">
                       <input
@@ -158,7 +159,7 @@ export function ChangePasswordView() {
                         value={formData.currentPassword}
                         onChange={(e) => setFormData({ ...formData, currentPassword: e.target.value })}
                         className="w-full px-4 py-3 pl-11 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                        placeholder="รหัสผ่านปัจจุบัน"
+                        placeholder={UI_CONFIG.placeholders.currentPassword}
                       />
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted">
                         🔑
@@ -179,7 +180,7 @@ export function ChangePasswordView() {
                         value={formData.newPassword}
                         onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
                         className="w-full px-4 py-3 pl-11 pr-11 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                        placeholder="อย่างน้อย 6 ตัวอักษร"
+                        placeholder={UI_CONFIG.placeholders.newPassword}
                       />
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted">
                         🔒
@@ -215,7 +216,7 @@ export function ChangePasswordView() {
                   {/* Confirm New Password */}
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
-                      ยืนยันรหัสผ่านใหม่
+                      {UI_CONFIG.placeholders.confirmPassword}
                     </label>
                     <div className="relative">
                       <input
@@ -228,7 +229,7 @@ export function ChangePasswordView() {
                             ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
                             : 'border-border focus:border-primary focus:ring-primary/20'
                         }`}
-                        placeholder="ยืนยันรหัสผ่านใหม่"
+                        placeholder={UI_CONFIG.placeholders.confirmPassword}
                       />
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted">
                         🔐
@@ -253,7 +254,7 @@ export function ChangePasswordView() {
                         กำลังเปลี่ยนรหัสผ่าน...
                       </span>
                     ) : (
-                      'เปลี่ยนรหัสผ่าน'
+                      UI_CONFIG.labels.changePassword
                     )}
                   </AnimatedButton>
 

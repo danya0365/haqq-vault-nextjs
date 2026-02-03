@@ -5,6 +5,7 @@
  * Reset password page with token validation
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
 import { MainLayout } from '@/src/presentation/layouts/MainLayout';
@@ -145,7 +146,7 @@ export function ResetPasswordView() {
                         value={formData.password}
                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                         className="w-full px-4 py-3 pl-11 pr-11 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                        placeholder="อย่างน้อย 6 ตัวอักษร"
+                        placeholder={UI_CONFIG.placeholders.newPassword}
                       />
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted">
                         🔒
@@ -176,7 +177,7 @@ export function ResetPasswordView() {
                             ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
                             : 'border-border focus:border-primary focus:ring-primary/20'
                         }`}
-                        placeholder="ยืนยันรหัสผ่าน"
+                        placeholder={UI_CONFIG.placeholders.confirmPasswordGeneral}
                       />
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted">
                         🔐

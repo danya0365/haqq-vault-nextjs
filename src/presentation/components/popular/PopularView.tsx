@@ -5,6 +5,7 @@
  * Popular topics page showing most viewed content
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import type { SeverityLevel } from '@/src/domain/types/topic';
 import { MOCK_CATEGORIES, MOCK_TOPICS } from '@/src/infrastructure/repositories/mock/data/mockData';
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
@@ -58,10 +59,10 @@ export function PopularView() {
               <AnimatedIslamicPattern type="star" size="md" color="gold" animation="pulse" />
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              🔥 คำตอบยอดนิยม
+              {UI_CONFIG.popularTitle}
             </h1>
             <p className="text-muted max-w-2xl mx-auto text-lg">
-              คำตอบที่ได้รับความสนใจและมีผู้เข้าชมมากที่สุด
+              {UI_CONFIG.popularDescription}
             </p>
           </animated.div>
 
@@ -161,7 +162,7 @@ function PopularTopicItem({
               <div className="text-lg font-semibold text-primary">
                 {topic.viewCount.toLocaleString()}
               </div>
-              <div className="text-xs text-muted">เข้าชม</div>
+              <div className="text-xs text-muted">{UI_CONFIG.viewsCount}</div>
             </div>
           </div>
         </AnimatedCard>

@@ -1,9 +1,10 @@
+import { SITE_CONFIG } from '@/src/config/site.config';
 import { LoginView } from "@/src/presentation/components/auth/LoginView";
-import type { Metadata } from "next";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "เข้าสู่ระบบ | Haqq Vault",
-  description: "เข้าสู่ระบบ Haqq Vault",
+  title: SITE_CONFIG.metadata.login.title,
+  description: SITE_CONFIG.metadata.login.description,
 };
 
 export default function LoginPage() {

@@ -5,6 +5,8 @@
  * Admin dashboard for managing the platform
  */
 
+import { SITE_CONFIG } from '@/src/config/site.config';
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { useAuthStore } from '@/src/infrastructure/stores/authStore';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
@@ -77,7 +79,7 @@ export function AdminDashboardView() {
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <span className="animate-spin text-4xl inline-block mb-4">⏳</span>
-            <p className="text-muted">กำลังตรวจสอบสิทธิ์...</p>
+            <p className="text-muted">{UI_CONFIG.labels.checkingPermission}</p>
           </div>
         </div>
       </MainLayout>
@@ -109,9 +111,9 @@ export function AdminDashboardView() {
               <AnimatedIslamicPattern type="octagon" size="md" color="primary" animation="pulse" />
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-                  ⚙️ แผงควบคุมผู้ดูแล
+                  ⚙️ {UI_CONFIG.labels.admin}
                 </h1>
-                <p className="text-muted">จัดการและดูแลระบบ Haqq Vault</p>
+                <p className="text-muted">จัดการและดูแลระบบ {SITE_CONFIG.name}</p>
               </div>
             </div>
           </animated.div>
@@ -281,8 +283,8 @@ export function AdminDashboardView() {
                     <h3 className="text-lg font-semibold text-foreground mb-6">👥 ผู้ใช้งาน</h3>
                     <div className="space-y-4">
                       {[
-                        { name: 'ผู้ดูแลระบบ', email: 'admin@haqqvault.com', role: 'admin', status: 'active' },
-                        { name: 'ดร.อับดุลเลาะห์', email: 'scholar@haqqvault.com', role: 'scholar', status: 'active' },
+                        { name: 'ผู้ดูแลระบบ', email: 'cleancode1986@gmail.com', role: 'admin', status: 'active' },
+                        { name: 'ดร.อับดุลเลาะห์', email: 'scholar@cleancode1986.com', role: 'scholar', status: 'active' },
                         { name: 'ผู้ใช้ทั่วไป', email: 'user@example.com', role: 'user', status: 'active' },
                       ].map((u, idx) => (
                         <div key={idx} className="flex items-center justify-between p-4 rounded-xl border border-border">
@@ -347,7 +349,7 @@ export function AdminDashboardView() {
                         </label>
                         <input
                           type="text"
-                          defaultValue="Haqq Vault"
+                          defaultValue={SITE_CONFIG.name}
                           className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                         />
                       </div>
@@ -357,7 +359,7 @@ export function AdminDashboardView() {
                         </label>
                         <textarea
                           rows={3}
-                          defaultValue="คลังคำตอบชุบฮาต - ตอบข้อกล่าวหาอิสลาม"
+                          defaultValue={SITE_CONFIG.description}
                           className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none"
                         />
                       </div>

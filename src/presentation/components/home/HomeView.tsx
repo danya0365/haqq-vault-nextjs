@@ -5,6 +5,8 @@
  * Homepage view component with Islamic-themed design
  */
 
+import { SITE_CONFIG } from '@/src/config/site.config';
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { MOCK_CATEGORIES, MOCK_STATS, MOCK_TOPICS } from '@/src/infrastructure/repositories/mock/data/mockData';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
@@ -115,12 +117,10 @@ function HeroSection({
             <span className="text-gold-gradient">Vault</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted mb-4">
-            คลังคำตอบชุบฮาต
+            {SITE_CONFIG.slogan}
           </p>
           <p className="text-base md:text-lg text-muted-dark dark:text-muted max-w-2xl mx-auto mb-8">
-            แหล่งรวบรวมคำตอบสำหรับข้อกล่าวหาและข้อสงสัยเกี่ยวกับอิสลาม
-            <br className="hidden md:block" />
-            โดยใช้หลักฐานจากอัลกุรอาน หะดีษ และความเห็นของบรรดานักวิชาการ
+            {SITE_CONFIG.description}
           </p>
         </animated.div>
 
@@ -131,7 +131,7 @@ function HeroSection({
               type="text"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="ค้นหาคำตอบ เช่น อิสลามกับความรุนแรง..."
+              placeholder={UI_CONFIG.placeholders.search}
               className="w-full px-6 py-4 pl-14 text-lg rounded-2xl bg-surface dark:bg-surface border-2 border-transparent focus:border-primary outline-none shadow-lg shadow-black/5 transition-all duration-300 group-hover:shadow-xl"
             />
             <span className="absolute left-5 top-1/2 -translate-y-1/2 text-xl text-muted">
@@ -537,7 +537,7 @@ function TopicItemCard({
                 {severity.label}
               </span>
               {topic.isVerified && (
-                <span className="text-primary text-sm" title="ได้รับการยืนยัน">
+                <span className="text-primary text-sm" title={UI_CONFIG.labels.verified}>
                   ✓
                 </span>
               )}

@@ -1,22 +1,14 @@
+import { SITE_CONFIG } from '@/src/config/site.config';
 import { HomeView } from "@/src/presentation/components/home/HomeView";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Haqq Vault | คลังคำตอบชุบฮาต - BurhanQA",
-  description:
-    "แหล่งรวบรวมคำตอบสำหรับข้อกล่าวหาและข้อสงสัยเกี่ยวกับอิสลาม โดยใช้หลักฐานจากอัลกุรอาน หะดีษ และความเห็นของบรรดานักวิชาการ",
-  keywords: [
-    "อิสลาม",
-    "คำตอบ",
-    "ชุบฮาต",
-    "อัลกุรอาน",
-    "หะดีษ",
-    "BurhanQA",
-    "Haqq Vault",
-  ],
+  title: SITE_CONFIG.metadata.home.title,
+  description: SITE_CONFIG.metadata.home.description,
+  keywords: [...SITE_CONFIG.keywords],
   openGraph: {
-    title: "Haqq Vault | คลังคำตอบชุบฮาต",
-    description: "แหล่งรวบรวมคำตอบสำหรับข้อกล่าวหาและข้อสงสัยเกี่ยวกับอิสลาม",
+    title: SITE_CONFIG.metadata.home.title,
+    description: SITE_CONFIG.metadata.home.description,
     type: "website",
     locale: "th_TH",
   },

@@ -5,6 +5,7 @@
  * Email verification page with token handling
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
 import { MainLayout } from '@/src/presentation/layouts/MainLayout';
@@ -62,9 +63,9 @@ export function VerifyEmailView() {
                 <AnimatedIslamicPattern type="star" size="lg" color="gold" animation="pulse" />
               </div>
               <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-                ยืนยันอีเมล
+                {UI_CONFIG.verifyEmailTitle}
               </h1>
-              <p className="text-muted">ส่งลิงก์ยืนยันอีเมลใหม่</p>
+              <p className="text-muted">{UI_CONFIG.verifyEmailSubtitle}</p>
             </div>
 
             <div className={`transition-all duration-500 delay-100 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
@@ -80,7 +81,7 @@ export function VerifyEmailView() {
                     </p>
                     <Link href="/auth/login">
                       <AnimatedButton variant="outline" className="w-full">
-                        กลับไปเข้าสู่ระบบ
+                        {UI_CONFIG.backToLogin}
                       </AnimatedButton>
                     </Link>
                   </div>
@@ -128,13 +129,13 @@ export function VerifyEmailView() {
                           กำลังส่ง...
                         </span>
                       ) : (
-                        'ส่งลิงก์ยืนยันอีเมล'
+                        UI_CONFIG.verifyEmailTitle
                       )}
                     </AnimatedButton>
 
                     <Link href="/auth/login" className="block text-center">
                       <span className="text-sm text-primary hover:underline">
-                        ← กลับไปเข้าสู่ระบบ
+                        ← {UI_CONFIG.backToLogin}
                       </span>
                     </Link>
                   </form>
@@ -157,9 +158,9 @@ export function VerifyEmailView() {
                 <>
                   <div className="text-6xl mb-4 animate-bounce">📧</div>
                   <h1 className="text-xl font-bold text-foreground mb-2">
-                    กำลังยืนยันอีเมล...
+                    {UI_CONFIG.verifyingEmail}
                   </h1>
-                  <p className="text-muted">กรุณารอสักครู่</p>
+                  <p className="text-muted">{UI_CONFIG.pleaseWait}</p>
                 </>
               )}
 
@@ -167,7 +168,7 @@ export function VerifyEmailView() {
                 <>
                   <div className="text-6xl mb-4">✅</div>
                   <h1 className="text-2xl font-bold text-foreground mb-2">
-                    ยืนยันอีเมลสำเร็จ!
+                    {UI_CONFIG.verifyEmailSuccess}
                   </h1>
                   <p className="text-muted mb-6">
                     อีเมลของคุณได้รับการยืนยันเรียบร้อยแล้ว
@@ -184,7 +185,7 @@ export function VerifyEmailView() {
                 <>
                   <div className="text-6xl mb-4">❌</div>
                   <h1 className="text-2xl font-bold text-foreground mb-2">
-                    ยืนยันอีเมลไม่สำเร็จ
+                    {UI_CONFIG.verifyEmailError}
                   </h1>
                   <p className="text-muted mb-6">
                     {state.error || 'ลิงก์ไม่ถูกต้องหรือหมดอายุแล้ว'}
@@ -192,12 +193,12 @@ export function VerifyEmailView() {
                   <div className="space-y-3">
                     <Link href="/auth/verify-email" className="block">
                       <AnimatedButton variant="primary" className="w-full">
-                        ขอลิงก์ใหม่
+                        {UI_CONFIG.requestNewLink}
                       </AnimatedButton>
                     </Link>
                     <Link href="/auth/login" className="block">
                       <AnimatedButton variant="ghost" className="w-full">
-                        กลับไปเข้าสู่ระบบ
+                        {UI_CONFIG.backToLogin}
                       </AnimatedButton>
                     </Link>
                   </div>

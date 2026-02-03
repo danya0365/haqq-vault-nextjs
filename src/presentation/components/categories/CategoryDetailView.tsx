@@ -5,6 +5,7 @@
  * Category detail page showing topics in that category
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import type { SeverityLevel } from '@/src/domain/types/topic';
 import { MOCK_CATEGORIES, MOCK_TOPICS } from '@/src/infrastructure/repositories/mock/data/mockData';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
@@ -68,11 +69,11 @@ export function CategoryDetailView({ slug }: CategoryDetailViewProps) {
   const getSeverityBadge = (level: SeverityLevel) => {
     switch (level) {
       case 'basic':
-        return { label: 'พื้นฐาน', class: 'badge-basic', icon: '🟢' };
+        return { label: UI_CONFIG.severity.basic, class: 'badge-basic', icon: '🟢' };
       case 'intermediate':
-        return { label: 'ปานกลาง', class: 'badge-intermediate', icon: '🟡' };
+        return { label: UI_CONFIG.severity.intermediate, class: 'badge-intermediate', icon: '🟡' };
       case 'advanced':
-        return { label: 'ขั้นสูง', class: 'badge-advanced', icon: '🔴' };
+        return { label: UI_CONFIG.severity.advanced, class: 'badge-advanced', icon: '🔴' };
     }
   };
 
@@ -102,13 +103,11 @@ export function CategoryDetailView({ slug }: CategoryDetailViewProps) {
               <ol className="flex items-center justify-center gap-2 text-sm text-muted">
                 <li>
                   <Link href="/" className="hover:text-primary transition-colors">
-                    หน้าแรก
+                    {UI_CONFIG.labels.home}
                   </Link>
-                </li>
-                <li>/</li>
-                <li>
+                  <span className="mx-2 text-muted">/</span>
                   <Link href="/categories" className="hover:text-primary transition-colors">
-                    หมวดหมู่
+                    {UI_CONFIG.labels.categories}
                   </Link>
                 </li>
                 <li>/</li>
@@ -149,7 +148,7 @@ export function CategoryDetailView({ slug }: CategoryDetailViewProps) {
                   style={{ backgroundColor: category.color }}
                 />
                 <span className="text-foreground font-medium">
-                  {topics.length} คำตอบ
+                  {topics.length} {UI_CONFIG.labels.answersCount}
                 </span>
               </div>
             </div>
@@ -165,10 +164,10 @@ export function CategoryDetailView({ slug }: CategoryDetailViewProps) {
               onChange={(e) => setSelectedSeverity(e.target.value as SeverityLevel | '')}
               className="px-4 py-2 rounded-lg bg-surface border border-border focus:border-primary outline-none text-sm"
             >
-              <option value="">ทุกระดับ</option>
-              <option value="basic">🟢 พื้นฐาน</option>
-              <option value="intermediate">🟡 ปานกลาง</option>
-              <option value="advanced">🔴 ขั้นสูง</option>
+              <option value="">{UI_CONFIG.allLevels}</option>
+              <option value="basic">🟢 {UI_CONFIG.severity.basic}</option>
+              <option value="intermediate">🟡 {UI_CONFIG.severity.intermediate}</option>
+              <option value="advanced">🔴 {UI_CONFIG.severity.advanced}</option>
             </select>
 
             <select
@@ -176,8 +175,8 @@ export function CategoryDetailView({ slug }: CategoryDetailViewProps) {
               onChange={(e) => setSortBy(e.target.value as 'newest' | 'popular')}
               className="px-4 py-2 rounded-lg bg-surface border border-border focus:border-primary outline-none text-sm"
             >
-              <option value="newest">🕐 ใหม่ล่าสุด</option>
-              <option value="popular">🔥 ยอดนิยม</option>
+              <option value="newest">🕐 {UI_CONFIG.sortByNewest}</option>
+              <option value="popular">🔥 {UI_CONFIG.sortByPopularSymbol}</option>
             </select>
           </animated.div>
 
@@ -197,10 +196,10 @@ export function CategoryDetailView({ slug }: CategoryDetailViewProps) {
             <div className="text-center py-16">
               <AnimatedIslamicPattern type="octagon" size="lg" color="primary" className="mx-auto mb-4 opacity-30" />
               <h3 className="text-xl font-semibold text-foreground mb-2">
-                ยังไม่มีคำตอบในหมวดหมู่นี้
+                {UI_CONFIG.noTopicsInCategory}
               </h3>
-              <p className="text-muted mb-6">
-                เรากำลังเพิ่มเติมคำตอบอย่างต่อเนื่อง
+              <p className="text-muted mb-8">
+                {UI_CONFIG.addingContinuous}
               </p>
             </div>
           )}
@@ -209,7 +208,7 @@ export function CategoryDetailView({ slug }: CategoryDetailViewProps) {
           <div className="mt-12 text-center">
             <Link href="/categories">
               <AnimatedButton variant="outline" startIcon={<span>←</span>}>
-                กลับไปดูหมวดหมู่ทั้งหมด
+                {UI_CONFIG.backToAllCategories}
               </AnimatedButton>
             </Link>
           </div>
@@ -226,11 +225,13 @@ function NotFoundState() {
       <div className="min-h-screen flex items-center justify-center py-16">
         <div className="text-center">
           <AnimatedIslamicPattern type="star" size="lg" color="gold" className="mx-auto mb-6 opacity-50" />
-          <h1 className="text-2xl font-bold text-foreground mb-2">ไม่พบหมวดหมู่</h1>
-          <p className="text-muted mb-6">หมวดหมู่ที่คุณกำลังหาอาจถูกลบหรือไม่มีในระบบ</p>
-          <Link href="/categories">
-            <AnimatedButton variant="primary">ดูหมวดหมู่ทั้งหมด</AnimatedButton>
-          </Link>
+          <h1 className="text-2xl font-bold text-foreground mb-2">{UI_CONFIG.labels.categoryNotFound}</h1>
+            <p className="text-muted mb-8">{UI_CONFIG.noTopicsInCategory}</p>
+            <Link href="/categories">
+              <AnimatedButton variant="primary">
+                {UI_CONFIG.backToAllCategories}
+              </AnimatedButton>
+            </Link>
         </div>
       </div>
     </MainLayout>
@@ -259,11 +260,11 @@ function TopicCardItem({
   const getSeverityBadge = (level: typeof topic.severityLevel) => {
     switch (level) {
       case 'basic':
-        return { label: 'พื้นฐาน', class: 'badge-basic', icon: '🟢' };
+        return { label: UI_CONFIG.severity.basic, class: 'badge-basic', icon: '🟢' };
       case 'intermediate':
-        return { label: 'ปานกลาง', class: 'badge-intermediate', icon: '🟡' };
+        return { label: UI_CONFIG.severity.intermediate, class: 'badge-intermediate', icon: '🟡' };
       case 'advanced':
-        return { label: 'ขั้นสูง', class: 'badge-advanced', icon: '🔴' };
+        return { label: UI_CONFIG.severity.advanced, class: 'badge-advanced', icon: '🔴' };
     }
   };
 
@@ -279,7 +280,7 @@ function TopicCardItem({
               {severity.icon} {severity.label}
             </span>
             {topic.isVerified && (
-              <span className="text-primary" title="ได้รับการยืนยัน">
+              <span className="text-primary" title={UI_CONFIG.labels.verified}>
                 ✓
               </span>
             )}

@@ -1,9 +1,10 @@
+import { SITE_CONFIG } from '@/src/config/site.config';
 import { ForgotPasswordView } from "@/src/presentation/components/auth/ForgotPasswordView";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "ลืมรหัสผ่าน | Haqq Vault",
-  description: "รีเซ็ตรหัสผ่าน Haqq Vault",
+  title: SITE_CONFIG.metadata.forgotPassword.title,
+  description: SITE_CONFIG.metadata.forgotPassword.description,
 };
 
 export default function ForgotPasswordPage() {

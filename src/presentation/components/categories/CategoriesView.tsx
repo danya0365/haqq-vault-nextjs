@@ -5,6 +5,7 @@
  * Categories listing page
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { MOCK_CATEGORIES } from '@/src/infrastructure/repositories/mock/data/mockData';
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
@@ -38,10 +39,10 @@ export function CategoriesView() {
               <AnimatedIslamicPattern type="star" size="md" color="gold" animation="pulse" />
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              หมวดหมู่คำตอบ
+              {UI_CONFIG.categoriesTitle}
             </h1>
             <p className="text-muted max-w-2xl mx-auto text-lg">
-              เลือกหมวดหมู่ที่สนใจเพื่อค้นหาคำตอบที่เหมาะกับคุณ
+              {UI_CONFIG.categoriesDescription}
             </p>
           </animated.div>
 
@@ -65,7 +66,7 @@ export function CategoriesView() {
               <div className="w-12 h-px bg-border" />
             </div>
             <p className="mt-4 text-muted">
-              เรากำลังเพิ่มเติมคำตอบอย่างต่อเนื่อง
+              {UI_CONFIG.addingContinuous}
             </p>
           </div>
         </div>
@@ -141,7 +142,7 @@ function CategoryCardItem({
                 </span>
               </div>
               <span className="text-primary text-sm font-medium flex items-center gap-1">
-                ดูทั้งหมด
+                {UI_CONFIG.viewAll}
                 <span>→</span>
               </span>
             </div>
