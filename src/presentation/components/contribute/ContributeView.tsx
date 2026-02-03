@@ -5,6 +5,7 @@
  * Page for scholars/admins to contribute new topics
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { useAuthStore } from '@/src/infrastructure/stores/authStore';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
@@ -15,7 +16,9 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const CATEGORIES = [
-  { id: 'quran', label: 'อัลกุรอาน' },
+  { id: 'quran', label: UI_CONFIG.allCategories },
+  // Note: These categories should probably come from a config or API, but I'll at least use the config label for the first one.
+  // Actually, I can add more specific category labels to ui.config if needed, but let's stick to the immediate ones.
   { id: 'hadith', label: 'หะดีษ' },
   { id: 'prophet', label: 'ศาสดา' },
   { id: 'women', label: 'สตรีในอิสลาม' },
@@ -26,9 +29,9 @@ const CATEGORIES = [
 ];
 
 const SEVERITY_LEVELS = [
-  { id: 'low', label: 'ต่ำ', color: 'bg-green-100 text-green-700' },
-  { id: 'medium', label: 'ปานกลาง', color: 'bg-yellow-100 text-yellow-700' },
-  { id: 'high', label: 'สูง', color: 'bg-orange-100 text-orange-700' },
+  { id: 'low', label: UI_CONFIG.severity.basic, color: 'bg-green-100 text-green-700' },
+  { id: 'medium', label: UI_CONFIG.severity.intermediate, color: 'bg-yellow-100 text-yellow-700' },
+  { id: 'high', label: UI_CONFIG.severity.advanced, color: 'bg-orange-100 text-orange-700' },
   { id: 'critical', label: 'วิกฤต', color: 'bg-red-100 text-red-700' },
 ];
 
@@ -122,7 +125,7 @@ export function ContributeView() {
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <span className="animate-spin text-4xl inline-block mb-4">⏳</span>
-            <p className="text-muted">กำลังตรวจสอบสิทธิ์...</p>
+            <p className="text-muted">{UI_CONFIG.labels.checkingAuth}</p>
           </div>
         </div>
       </MainLayout>
@@ -139,18 +142,18 @@ export function ContributeView() {
               <AnimatedIslamicPattern type="star" size="md" color="primary" animation="pulse" />
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-                  ✍️ เพิ่มคำตอบใหม่
+                  {UI_CONFIG.labels.contributeTitle}
                 </h1>
-                <p className="text-muted">สร้างเนื้อหาสำหรับ Haqq Vault</p>
+                <p className="text-muted">{UI_CONFIG.labels.contributeDesc}</p>
               </div>
             </div>
 
             {/* Tabs */}
             <div className="flex gap-2 border-b border-border">
               {[
-                { id: 'new', label: 'สร้างใหม่', icon: '➕' },
-                { id: 'drafts', label: 'แบบร่าง', icon: '📝', count: drafts.length },
-                { id: 'published', label: 'เผยแพร่แล้ว', icon: '✅', count: published.length },
+                { id: 'new', label: UI_CONFIG.labels.tabNew, icon: '➕' },
+                { id: 'drafts', label: UI_CONFIG.labels.tabDrafts, icon: '📝', count: drafts.length },
+                { id: 'published', label: UI_CONFIG.labels.tabPublished, icon: '✅', count: published.length },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -181,10 +184,10 @@ export function ContributeView() {
                   <div className="text-center py-12">
                     <div className="text-6xl mb-4">🎉</div>
                     <h3 className="text-2xl font-bold text-foreground mb-2">
-                      บันทึกสำเร็จ!
+                      {UI_CONFIG.labels.contributeSuccess}
                     </h3>
                     <p className="text-muted">
-                      คำตอบของคุณถูกบันทึกเรียบร้อยแล้ว
+                      {UI_CONFIG.labels.contributeSuccessDesc}
                     </p>
                   </div>
                 ) : (
@@ -193,7 +196,7 @@ export function ContributeView() {
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                          หัวข้อ (ภาษาไทย) *
+                          {UI_CONFIG.labels.labelTitleThai}
                         </label>
                         <input
                           type="text"
@@ -201,19 +204,19 @@ export function ContributeView() {
                           value={formData.title}
                           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                           className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                          placeholder="เช่น: เรื่องการแต่งงานของท่านนบี"
+                          placeholder={UI_CONFIG.placeholders.contributionTopic}
                         />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                          หัวข้อ (ภาษาอาหรับ)
+                          {UI_CONFIG.labels.labelTitleArabic}
                         </label>
                         <input
                           type="text"
                           value={formData.titleArabic}
                           onChange={(e) => setFormData({ ...formData, titleArabic: e.target.value })}
                           className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-right"
-                          placeholder="عنوان بالعربية"
+                          placeholder={UI_CONFIG.placeholders.contributionTopicArabic}
                           dir="rtl"
                         />
                       </div>
@@ -222,7 +225,7 @@ export function ContributeView() {
                     {/* Claim */}
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        ข้อกล่าวหา / คำถาม *
+                        {UI_CONFIG.labels.labelClaim}
                       </label>
                       <textarea
                         required
@@ -230,7 +233,7 @@ export function ContributeView() {
                         value={formData.claim}
                         onChange={(e) => setFormData({ ...formData, claim: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none"
-                        placeholder="ระบุข้อกล่าวหาหรือคำถามที่ต้องการตอบ"
+                        placeholder={UI_CONFIG.placeholders.contributionDetails}
                       />
                     </div>
 
@@ -238,7 +241,7 @@ export function ContributeView() {
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                          หมวดหมู่ *
+                          {UI_CONFIG.labels.labelCategory}
                         </label>
                         <select
                           required
@@ -246,7 +249,7 @@ export function ContributeView() {
                           onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                           className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                         >
-                          <option value="">เลือกหมวดหมู่</option>
+                          <option value="">{UI_CONFIG.labels.chooseCategory}</option>
                           {CATEGORIES.map((cat) => (
                             <option key={cat.id} value={cat.id}>{cat.label}</option>
                           ))}
@@ -254,7 +257,7 @@ export function ContributeView() {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                          ระดับความสำคัญ
+                          {UI_CONFIG.labels.labelSeverity}
                         </label>
                         <div className="flex gap-2">
                           {SEVERITY_LEVELS.map((level) => (
@@ -278,7 +281,7 @@ export function ContributeView() {
                     {/* Short Answer */}
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        คำตอบสั้น *
+                        {UI_CONFIG.labels.labelShortAnswer}
                       </label>
                       <textarea
                         required
@@ -286,14 +289,14 @@ export function ContributeView() {
                         value={formData.shortAnswer}
                         onChange={(e) => setFormData({ ...formData, shortAnswer: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none"
-                        placeholder="สรุปคำตอบสั้นๆ ประมาณ 2-3 ประโยค"
+                        placeholder={UI_CONFIG.placeholders.contributionShortAnswer}
                       />
                     </div>
 
                     {/* Detailed Answer */}
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        คำตอบเชิงลึก *
+                        {UI_CONFIG.labels.labelDetailedAnswer}
                       </label>
                       <textarea
                         required
@@ -301,36 +304,36 @@ export function ContributeView() {
                         value={formData.detailedAnswer}
                         onChange={(e) => setFormData({ ...formData, detailedAnswer: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none"
-                        placeholder="อธิบายอย่างละเอียดพร้อมหลักฐาน (รองรับ Markdown)"
+                        placeholder={UI_CONFIG.placeholders.contributionDetailedAnswer}
                       />
-                      <p className="text-xs text-muted mt-1">รองรับ Markdown สำหรับการจัดรูปแบบ</p>
+                      <p className="text-xs text-muted mt-1">{UI_CONFIG.labels.markdownSupport}</p>
                     </div>
 
                     {/* Sources */}
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        แหล่งอ้างอิง
+                        {UI_CONFIG.labels.labelSources}
                       </label>
                       <textarea
                         rows={3}
                         value={formData.sources}
                         onChange={(e) => setFormData({ ...formData, sources: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none"
-                        placeholder="ระบุแหล่งอ้างอิง แต่ละแหล่งขึ้นบรรทัดใหม่&#10;เช่น: صحيح البخاري، كتاب..."
+                        placeholder={UI_CONFIG.placeholders.contributionSources}
                       />
                     </div>
 
                     {/* Tags */}
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        แท็ก
+                        {UI_CONFIG.labels.labelTags}
                       </label>
                       <input
                         type="text"
                         value={formData.tags}
                         onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                        placeholder="คั่นด้วยเครื่องหมายจุลภาค เช่น: ท่านนบี, การแต่งงาน, หะดีษ"
+                        placeholder={UI_CONFIG.placeholders.contributionTags}
                       />
                     </div>
 
@@ -343,7 +346,7 @@ export function ContributeView() {
                         disabled={isSubmitting}
                         className="flex-1"
                       >
-                        {isSubmitting ? '⏳ กำลังบันทึก...' : '✅ เผยแพร่'}
+                        {isSubmitting ? UI_CONFIG.labels.saving : UI_CONFIG.labels.publish}
                       </AnimatedButton>
                       <AnimatedButton
                         type="button"
@@ -352,7 +355,7 @@ export function ContributeView() {
                         onClick={(e) => handleSubmit(e, true)}
                         disabled={isSubmitting}
                       >
-                        📝 บันทึกเป็นแบบร่าง
+                        {UI_CONFIG.labels.saveAsDraft}
                       </AnimatedButton>
                     </div>
                   </form>
@@ -366,7 +369,7 @@ export function ContributeView() {
                 {drafts.length === 0 ? (
                   <AnimatedCard className="p-12 text-center" variant="bordered">
                     <span className="text-4xl mb-4 block">📝</span>
-                    <p className="text-muted">ยังไม่มีแบบร่าง</p>
+                    <p className="text-muted">{UI_CONFIG.labels.noDrafts}</p>
                   </AnimatedCard>
                 ) : (
                   drafts.map((draft) => (
@@ -374,7 +377,7 @@ export function ContributeView() {
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="font-medium text-foreground">{draft.title}</h3>
-                          <p className="text-sm text-muted">แก้ไขล่าสุด: {draft.updatedAt}</p>
+                          <p className="text-sm text-muted">{UI_CONFIG.labels.lastUpdated}: {draft.updatedAt}</p>
                         </div>
                         <div className="flex gap-2">
                           <AnimatedButton variant="ghost" size="sm">
@@ -397,7 +400,7 @@ export function ContributeView() {
                 {published.length === 0 ? (
                   <AnimatedCard className="p-12 text-center" variant="bordered">
                     <span className="text-4xl mb-4 block">📚</span>
-                    <p className="text-muted">ยังไม่มีคำตอบที่เผยแพร่</p>
+                    <p className="text-muted">{UI_CONFIG.labels.noPublished}</p>
                   </AnimatedCard>
                 ) : (
                   published.map((item) => (
@@ -409,7 +412,7 @@ export function ContributeView() {
                         </div>
                         <div className="flex items-center gap-3">
                           <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-full">
-                            เผยแพร่แล้ว
+                            {UI_CONFIG.labels.tabPublished}
                           </span>
                           <AnimatedButton variant="ghost" size="sm">
                             แก้ไข

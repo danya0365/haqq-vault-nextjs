@@ -4,7 +4,7 @@
  * SearchView
  * Full-featured search page with instant results
  */
-
+import { UI_CONFIG } from '@/src/config/ui.config';
 import type { SeverityLevel, Topic } from '@/src/domain/types/topic';
 import { MOCK_CATEGORIES, MOCK_TOPICS } from '@/src/infrastructure/repositories/mock/data/mockData';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
@@ -88,10 +88,10 @@ export function SearchView() {
               <AnimatedIslamicPattern type="star" size="md" color="primary" animation="rotate" />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-              ค้นหาคำตอบ
+              {UI_CONFIG.labels.searchTitle}
             </h1>
             <p className="text-muted">
-              พิมพ์คำค้นหาเพื่อค้นหาคำตอบที่คุณต้องการ
+              {UI_CONFIG.labels.searchDesc}
             </p>
           </animated.div>
 
@@ -102,7 +102,7 @@ export function SearchView() {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="เช่น อิสลามกับความรุนแรง, สตรีในอิสลาม..."
+                placeholder={UI_CONFIG.placeholders.advancedSearch}
                 autoFocus
                 className="w-full px-6 py-5 pl-14 text-lg rounded-2xl bg-surface border-2 border-transparent focus:border-primary shadow-lg outline-none transition-all"
               />
@@ -124,7 +124,7 @@ export function SearchView() {
           {!debouncedQuery && (
             <animated.div style={headerSpring} className="mb-12">
               <h2 className="text-sm font-medium text-muted mb-4 text-center">
-                คำค้นหายอดนิยม
+                {UI_CONFIG.labels.popularSearches}
               </h2>
               <div className="flex flex-wrap justify-center gap-2">
                 {popularSearches.map((term) => (
@@ -146,8 +146,7 @@ export function SearchView() {
               {/* Results count */}
               <div className="mb-6 flex items-center justify-between">
                 <p className="text-muted">
-                  พบ <span className="font-semibold text-foreground">{results.length}</span> ผลลัพธ์
-                  สำหรับ &ldquo;<span className="text-primary">{debouncedQuery}</span>&rdquo;
+                  {UI_CONFIG.labels.foundResultsPrefix} <span className="font-semibold text-foreground">{results.length}</span> {UI_CONFIG.labels.foundResultsSuffix} &ldquo;<span className="text-primary">{debouncedQuery}</span>&rdquo;
                 </p>
               </div>
 
@@ -174,7 +173,7 @@ export function SearchView() {
           {!debouncedQuery && (
             <animated.div style={headerSpring}>
               <h2 className="text-lg font-semibold text-foreground mb-4 text-center">
-                หรือเลือกตามหมวดหมู่
+                {UI_CONFIG.labels.orBrowseCategories}
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {MOCK_CATEGORIES.filter((c) => c.isActive).map((category) => (
@@ -220,11 +219,11 @@ function SearchResultCard({
   const getSeverityBadge = (level: SeverityLevel) => {
     switch (level) {
       case 'basic':
-        return { label: 'พื้นฐาน', class: 'badge-basic' };
+        return { label: UI_CONFIG.severity.basic, class: 'badge-basic' };
       case 'intermediate':
-        return { label: 'ปานกลาง', class: 'badge-intermediate' };
+        return { label: UI_CONFIG.severity.intermediate, class: 'badge-intermediate' };
       case 'advanced':
-        return { label: 'ขั้นสูง', class: 'badge-advanced' };
+        return { label: UI_CONFIG.severity.advanced, class: 'badge-advanced' };
     }
   };
 
@@ -270,7 +269,7 @@ function SearchResultCard({
               </span>
             </div>
             {topic.isVerified && (
-              <span className="text-primary flex-shrink-0" title="ได้รับการยืนยัน">
+              <span className="text-primary flex-shrink-0" title={UI_CONFIG.labels.verified}>
                 ✓
               </span>
             )}
@@ -313,19 +312,19 @@ function NoResultsState({ query }: { query: string }) {
     <div className="text-center py-12">
       <div className="text-6xl mb-4">🔍</div>
       <h3 className="text-xl font-semibold text-foreground mb-2">
-        ไม่พบผลลัพธ์
+        {UI_CONFIG.labels.noResultsFound}
       </h3>
       <p className="text-muted mb-6 max-w-md mx-auto">
-        ไม่พบคำตอบที่ตรงกับ &ldquo;{query}&rdquo;
+        {UI_CONFIG.labels.noResultsMatching} &ldquo;{query}&rdquo;
         <br />
-        ลองใช้คำอื่นหรือตรวจสอบการสะกดคำ
+        {UI_CONFIG.labels.checkSpelling}
       </p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <Link href="/topics">
-          <AnimatedButton variant="primary">ดูคำตอบทั้งหมด</AnimatedButton>
+          <AnimatedButton variant="primary">{UI_CONFIG.labels.viewAllAnswers}</AnimatedButton>
         </Link>
         <Link href="/categories">
-          <AnimatedButton variant="outline">เลือกหมวดหมู่</AnimatedButton>
+          <AnimatedButton variant="outline">{UI_CONFIG.labels.chooseCategory}</AnimatedButton>
         </Link>
       </div>
     </div>

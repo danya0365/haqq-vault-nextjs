@@ -6,6 +6,7 @@
  * Using Tailwind CSS for animations (no react-spring)
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { DEMO_ACCOUNTS } from '@/src/infrastructure/repositories/mock/data/mockUsers';
 import { useAuthStore } from '@/src/infrastructure/stores/authStore';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
@@ -83,10 +84,10 @@ export function LoginView() {
               <AnimatedIslamicPattern type="star" size="lg" color="primary" animation="pulse" />
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-              ยินดีต้อนรับกลับ
+              {UI_CONFIG.welcomeBack}
             </h1>
-            <p className="arabic-text text-lg text-muted mb-1">مرحباً بعودتك</p>
-            <p className="text-muted">เข้าสู่ระบบเพื่อดำเนินการต่อ</p>
+            <p className="arabic-text text-lg text-muted mb-1">{UI_CONFIG.loginArabic}</p>
+            <p className="text-muted">{UI_CONFIG.loginToContinue}</p>
           </div>
 
           {/* Login Form */}
@@ -156,13 +157,13 @@ export function LoginView() {
                       onChange={(e) => setFormData({ ...formData, remember: e.target.checked })}
                       className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
                     />
-                    <span className="text-muted">จดจำฉัน</span>
+                    <span className="text-muted">{UI_CONFIG.rememberMe}</span>
                   </label>
                   <Link
                     href="/auth/forgot-password"
                     className="text-primary hover:underline"
                   >
-                    ลืมรหัสผ่าน?
+                    {UI_CONFIG.forgotPasswordLabel}
                   </Link>
                 </div>
 
@@ -177,10 +178,10 @@ export function LoginView() {
                   {isLoading ? (
                     <span className="flex items-center justify-center gap-2">
                       <span className="animate-spin">⏳</span>
-                      กำลังเข้าสู่ระบบ...
+                      {UI_CONFIG.loginLoading}
                     </span>
                   ) : (
-                    'เข้าสู่ระบบ'
+                    UI_CONFIG.loginTitle
                   )}
                 </AnimatedButton>
               </form>
@@ -191,7 +192,7 @@ export function LoginView() {
                   <div className="w-full border-t border-border" />
                 </div>
                 <div className="relative flex justify-center">
-                  <span className="px-3 bg-surface text-sm text-muted">หรือ</span>
+                  <span className="px-3 bg-surface text-sm text-muted">{UI_CONFIG.orWith}</span>
                 </div>
               </div>
 
@@ -204,16 +205,16 @@ export function LoginView() {
                 >
                   <span>🌐</span>
                   <span className="text-sm font-medium text-foreground">
-                    ดำเนินการต่อด้วย Google
+                    {UI_CONFIG.continueWithGoogle}
                   </span>
                 </button>
               </div>
 
               {/* Register link */}
               <p className="text-center text-sm text-muted mt-6">
-                ยังไม่มีบัญชี?{' '}
+                {UI_CONFIG.dontHaveAccount}{' '}
                 <Link href="/auth/register" className="text-primary hover:underline font-medium">
-                  สมัครสมาชิก
+                  {UI_CONFIG.registerNow}
                 </Link>
               </p>
             </div>
@@ -224,8 +225,8 @@ export function LoginView() {
             <div className="bg-gradient-to-br from-primary/5 to-gold/5 dark:from-primary/10 dark:to-gold/10 border border-primary/20 rounded-2xl p-4 md:p-6">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-xl">🚀</span>
-                <h3 className="font-semibold text-foreground">เข้าสู่ระบบด่วน</h3>
-                <span className="text-xs text-muted">(คลิกเพื่อ Auto Login)</span>
+                <h3 className="font-semibold text-foreground">{UI_CONFIG.quickLogin}</h3>
+                <span className="text-xs text-muted">{UI_CONFIG.clickToAutoLogin}</span>
               </div>
               
               <div className="grid gap-3">

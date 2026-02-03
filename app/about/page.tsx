@@ -1,10 +1,10 @@
+import { SITE_CONFIG } from '@/src/config/site.config';
 import { AboutView } from "@/src/presentation/components/about/AboutView";
-import type { Metadata } from "next";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "เกี่ยวกับเรา | Haqq Vault",
-  description:
-    "รู้จัก Haqq Vault - แพลตฟอร์มรวบรวมคำตอบสำหรับข้อกล่าวหาและข้อสงสัยเกี่ยวกับอิสลาม",
+  title: SITE_CONFIG.metadata.about.title,
+  description: SITE_CONFIG.metadata.about.description,
 };
 
 export default function AboutPage() {

@@ -9,7 +9,7 @@ import type { User } from '@/src/domain/types/user';
 export const MOCK_USERS: User[] = [
   {
     id: '1',
-    email: 'admin@haqqvault.com',
+    email: 'cleancode1986@gmail.com',
     name: 'ผู้ดูแลระบบ',
     role: 'admin',
     createdAt: '2024-01-01T00:00:00.000Z',
@@ -19,7 +19,7 @@ export const MOCK_USERS: User[] = [
   },
   {
     id: '2',
-    email: 'scholar@haqqvault.com',
+    email: 'scholar@cleancode1986.com',
     name: 'ดร.อับดุลเลาะห์',
     role: 'scholar',
     createdAt: '2024-01-15T00:00:00.000Z',
@@ -29,7 +29,7 @@ export const MOCK_USERS: User[] = [
   },
   {
     id: '3',
-    email: 'scholar2@haqqvault.com',
+    email: 'scholar2@cleancode1986.com',
     name: 'อุสตาซ มูฮัมหมัด',
     role: 'scholar',
     createdAt: '2024-02-01T00:00:00.000Z',
@@ -70,9 +70,9 @@ export const MOCK_USERS: User[] = [
 
 // Password mapping for mock users
 export const MOCK_PASSWORDS: Record<string, string> = {
-  'admin@haqqvault.com': 'admin123',
-  'scholar@haqqvault.com': 'scholar123',
-  'scholar2@haqqvault.com': 'scholar123',
+  'cleancode1986@gmail.com': 'admin123',
+  'scholar@cleancode1986.com': 'scholar123',
+  'scholar2@cleancode1986.com': 'scholar123',
   'user@example.com': 'user123',
   'fatimah@example.com': 'user123',
   'ahmad@example.com': 'user123',

@@ -6,24 +6,13 @@
  * Using Tailwind CSS for all animations (no react-spring)
  */
 
+import { NAV_LINKS, type NavLink } from '@/src/config/navigation.config';
+import { SITE_CONFIG } from '@/src/config/site.config';
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { useAuthStore } from '@/src/infrastructure/stores/authStore';
 import { ThemeToggle } from '@/src/presentation/components/common/ThemeToggle';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-
-interface NavLink {
-  href: string;
-  label: string;
-  labelArabic?: string;
-  icon?: string;
-}
-
-const NAV_LINKS: NavLink[] = [
-  { href: '/', label: 'หน้าแรก', icon: '🏠' },
-  { href: '/topics', label: 'คำตอบทั้งหมด', icon: '📚' },
-  { href: '/categories', label: 'หมวดหมู่', icon: '📂' },
-  { href: '/search', label: 'ค้นหา', icon: '🔍' },
-];
 
 export function MainHeader() {
   const { user, isAuthenticated, logout } = useAuthStore();
@@ -58,7 +47,6 @@ export function MainHeader() {
     logout();
     setIsUserMenuOpen(false);
   };
-
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
       case 'admin':
@@ -67,6 +55,17 @@ export function MainHeader() {
         return 'bg-gold/20 text-gold-dark dark:text-gold';
       default:
         return 'bg-primary/10 text-primary';
+    }
+  };
+
+  const getRoleLabel = (role: string) => {
+    switch (role) {
+      case 'admin':
+        return UI_CONFIG.roles.admin;
+      case 'scholar':
+        return UI_CONFIG.roles.scholar;
+      default:
+        return UI_CONFIG.roles.member;
     }
   };
 
@@ -87,15 +86,15 @@ export function MainHeader() {
                 {/* Islamic star decoration */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary to-primary-dark rounded-xl transform rotate-45 group-hover:rotate-[55deg] transition-transform duration-300" />
                 <span className="relative text-xl md:text-2xl font-bold text-white z-10">
-                  ح
+                  {SITE_CONFIG.logo.character}
                 </span>
               </div>
               <div className="hidden sm:block">
                 <h1 className="text-lg md:text-xl font-bold text-foreground group-hover:text-primary transition-colors">
-                  Haqq Vault
+                  {SITE_CONFIG.name}
                 </h1>
                 <p className="text-xs text-muted hidden md:block">
-                  คลังคำตอบชุบฮาต
+                  {SITE_CONFIG.slogan}
                 </p>
               </div>
             </Link>
@@ -152,7 +151,7 @@ export function MainHeader() {
                           <p className="font-medium text-foreground truncate">{user.name}</p>
                           <p className="text-xs text-muted truncate">{user.email}</p>
                           <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded-full ${getRoleBadgeColor(user.role)}`}>
-                            {user.role === 'admin' ? 'ผู้ดูแล' : user.role === 'scholar' ? 'นักวิชาการ' : 'สมาชิก'}
+                            {getRoleLabel(user.role)}
                           </span>
                         </div>
                       </div>
@@ -166,7 +165,7 @@ export function MainHeader() {
                         className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                       >
                         <span>👤</span>
-                        <span>โปรไฟล์ของฉัน</span>
+                        <span>{UI_CONFIG.labels.myProfile}</span>
                       </Link>
 
                       {/* Admin Link */}
@@ -177,7 +176,7 @@ export function MainHeader() {
                           className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                         >
                           <span>⚙️</span>
-                          <span>จัดการระบบ</span>
+                          <span>{UI_CONFIG.labels.adminPanel}</span>
                         </Link>
                       )}
 
@@ -189,7 +188,7 @@ export function MainHeader() {
                           className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                         >
                           <span>✍️</span>
-                          <span>เพิ่มคำตอบ</span>
+                          <span>{UI_CONFIG.labels.addAnswer}</span>
                         </Link>
                       )}
 
@@ -200,7 +199,7 @@ export function MainHeader() {
                         className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                       >
                         <span>🚪</span>
-                        <span>ออกจากระบบ</span>
+                        <span>{UI_CONFIG.labels.logout}</span>
                       </button>
                     </div>
                   </div>
@@ -211,13 +210,13 @@ export function MainHeader() {
                     href="/auth/login"
                     className="px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
                   >
-                    เข้าสู่ระบบ
+                    {UI_CONFIG.labels.login}
                   </Link>
                   <Link
                     href="/auth/register"
                     className="px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-xl transition-colors"
                   >
-                    สมัครสมาชิก
+                    {UI_CONFIG.labels.register}
                   </Link>
                 </div>
               )}
@@ -285,7 +284,7 @@ export function MainHeader() {
                     </div>
                     <div>
                       <span className="font-medium text-foreground block">{user.name}</span>
-                      <span className="text-xs text-muted">ดูโปรไฟล์</span>
+                      <span className="text-xs text-muted">{UI_CONFIG.labels.viewProfile}</span>
                     </div>
                   </Link>
                   <button

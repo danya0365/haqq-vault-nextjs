@@ -1,3 +1,4 @@
+import { SITE_CONFIG } from '@/src/config/site.config';
 import { MOCK_CATEGORIES } from "@/src/infrastructure/repositories/mock/data/mockData";
 import { CategoryDetailView } from "@/src/presentation/components/categories/CategoryDetailView";
 import type { Metadata } from "next";
@@ -15,7 +16,7 @@ export async function generateMetadata({
 
   if (!category) {
     return {
-      title: "ไม่พบหมวดหมู่ | Haqq Vault",
+      title: SITE_CONFIG.metadata.notFound.title,
     };
   }
 

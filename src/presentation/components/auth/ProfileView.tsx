@@ -5,6 +5,7 @@
  * User profile page
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { useAuthStore } from '@/src/infrastructure/stores/authStore';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
 import { AnimatedCard } from '@/src/presentation/components/animated/AnimatedCard';
@@ -79,11 +80,11 @@ export function ProfileView() {
   const getRoleBadge = (role: string) => {
     switch (role) {
       case 'admin':
-        return { label: 'ผู้ดูแลระบบ', color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' };
+        return { label: UI_CONFIG.roles.admin, color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' };
       case 'scholar':
-        return { label: 'นักวิชาการ', color: 'bg-gold/20 text-gold-dark dark:text-gold' };
+        return { label: UI_CONFIG.roles.scholar, color: 'bg-gold/20 text-gold-dark dark:text-gold' };
       default:
-        return { label: 'สมาชิก', color: 'bg-primary/10 text-primary' };
+        return { label: UI_CONFIG.roles.member, color: 'bg-primary/10 text-primary' };
     }
   };
 
@@ -93,7 +94,7 @@ export function ProfileView() {
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <span className="animate-spin text-4xl inline-block mb-4">⏳</span>
-            <p className="text-muted">กำลังโหลด...</p>
+            <p className="text-muted">{UI_CONFIG.labels.pleaseWait}</p>
           </div>
         </div>
       </MainLayout>
@@ -109,16 +110,16 @@ export function ProfileView() {
           {/* Header */}
           <animated.div style={headerSpring} className="text-center mb-8">
             <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-              โปรไฟล์ของฉัน
+              {UI_CONFIG.labels.myProfileTitle}
             </h1>
-            <p className="text-muted">จัดการข้อมูลส่วนตัวของคุณ</p>
+            <p className="text-muted">{UI_CONFIG.labels.myProfileDesc}</p>
           </animated.div>
 
           {/* Success message */}
           {saveSuccess && (
             <animated.div style={contentSpring} className="mb-6">
               <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-3 rounded-xl text-sm text-center">
-                ✅ บันทึกข้อมูลสำเร็จ
+                ✅ {UI_CONFIG.labels.saveSuccess}
               </div>
             </animated.div>
           )}
@@ -155,13 +156,13 @@ export function ProfileView() {
               {/* Edit Form */}
               <div className="border-t border-border pt-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-foreground">ข้อมูลส่วนตัว</h3>
+                  <h3 className="font-semibold text-foreground">{UI_CONFIG.labels.personalInfo}</h3>
                   {!isEditing && (
                     <button
                       onClick={() => setIsEditing(true)}
                       className="text-sm text-primary hover:underline"
                     >
-                      แก้ไข
+                      {UI_CONFIG.labels.edit}
                     </button>
                   )}
                 </div>
@@ -170,7 +171,7 @@ export function ProfileView() {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        ชื่อแสดง
+                        {UI_CONFIG.labels.displayName}
                       </label>
                       <input
                         type="text"
@@ -181,14 +182,14 @@ export function ProfileView() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        เกี่ยวกับตัวคุณ
+                        {UI_CONFIG.labels.aboutMe}
                       </label>
                       <textarea
                         rows={3}
                         value={formData.bio}
                         onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none"
-                        placeholder="บอกเล่าเกี่ยวกับตัวคุณ..."
+                        placeholder={UI_CONFIG.placeholders.aboutMe}
                       />
                     </div>
                     <div className="flex gap-3">
@@ -197,31 +198,31 @@ export function ProfileView() {
                         onClick={handleSave}
                         disabled={isLoading}
                       >
-                        {isLoading ? 'กำลังบันทึก...' : 'บันทึก'}
-                      </AnimatedButton>
-                      <AnimatedButton
-                        variant="ghost"
-                        onClick={() => {
-                          setIsEditing(false);
-                          setFormData({ name: user.name || '', bio: user.bio || '' });
-                        }}
-                      >
-                        ยกเลิก
-                      </AnimatedButton>
+                        {isLoading ? UI_CONFIG.labels.saving : UI_CONFIG.labels.save}
+                </AnimatedButton>
+                <AnimatedButton
+                  variant="ghost"
+                  onClick={() => {
+                    setIsEditing(false);
+                    setFormData({ name: user.name || '', bio: user.bio || '' });
+                  }}
+                >
+                  {UI_CONFIG.labels.cancel}
+                </AnimatedButton>
                     </div>
                   </div>
                 ) : (
                   <div className="space-y-4">
                     <div>
-                      <p className="text-sm text-muted mb-1">ชื่อแสดง</p>
+                      <p className="text-sm text-muted mb-1">{UI_CONFIG.labels.displayName}</p>
                       <p className="text-foreground">{user.name}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted mb-1">เกี่ยวกับตัวคุณ</p>
+                      <p className="text-sm text-muted mb-1">{UI_CONFIG.labels.aboutMe}</p>
                       <p className="text-foreground">{user.bio || '-'}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted mb-1">สมาชิกตั้งแต่</p>
+                      <p className="text-sm text-muted mb-1">{UI_CONFIG.labels.memberSince}</p>
                       <p className="text-foreground">
                         {new Date(user.createdAt).toLocaleDateString('th-TH', {
                           year: 'numeric',
@@ -237,29 +238,29 @@ export function ProfileView() {
 
             {/* Security Section */}
             <AnimatedCard className="p-6 md:p-8 mb-6" variant="bordered">
-              <h3 className="font-semibold text-foreground mb-4">ความปลอดภัย</h3>
+              <h3 className="font-semibold text-foreground mb-4">{UI_CONFIG.labels.security}</h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-foreground">รหัสผ่าน</p>
-                    <p className="text-sm text-muted">เปลี่ยนรหัสผ่านของคุณ</p>
+                    <p className="text-foreground">{UI_CONFIG.labels.password}</p>
+                    <p className="text-sm text-muted">{UI_CONFIG.labels.changePasswordDesc}</p>
                   </div>
                   <Link href="/auth/change-password">
                     <AnimatedButton variant="outline" size="sm">
-                      เปลี่ยนรหัสผ่าน
+                      {UI_CONFIG.labels.changePassword}
                     </AnimatedButton>
                   </Link>
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-foreground">ยืนยันอีเมล</p>
+                    <p className="text-foreground">{UI_CONFIG.labels.emailVerification}</p>
                     <p className="text-sm text-muted">
-                      {user.isVerified ? '✅ ยืนยันแล้ว' : '❌ ยังไม่ได้ยืนยัน'}
+                      {user.isVerified ? `✅ ${UI_CONFIG.labels.verifiedStatus}` : `❌ ${UI_CONFIG.labels.unverifiedStatus}`}
                     </p>
                   </div>
                   {!user.isVerified && (
                     <AnimatedButton variant="outline" size="sm">
-                      ส่งลิงก์ยืนยัน
+                      {UI_CONFIG.labels.sendVerificationLink}
                     </AnimatedButton>
                   )}
                 </div>
@@ -268,11 +269,11 @@ export function ProfileView() {
 
             {/* Logout */}
             <div className="text-center">
-              <button
+                <button
                 onClick={handleLogout}
                 className="text-red-500 hover:text-red-600 hover:underline text-sm"
               >
-                ออกจากระบบ
+                {UI_CONFIG.labels.logout}
               </button>
             </div>
           </animated.div>

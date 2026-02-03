@@ -5,6 +5,8 @@
  * About page for Haqq Vault
  */
 
+import { SITE_CONFIG } from '@/src/config/site.config';
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
 import { MainLayout } from '@/src/presentation/layouts/MainLayout';
@@ -42,10 +44,10 @@ export function AboutView() {
               <AnimatedIslamicPattern type="arabesque" size="lg" color="primary" animation="float" />
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              เกี่ยวกับ Haqq Vault
+              {UI_CONFIG.aboutTitle}
             </h1>
-            <p className="arabic-text text-center text-xl text-muted mb-2">حق والٹ</p>
-            <p className="text-muted text-lg">คลังคำตอบชุบฮาต</p>
+            <p className="arabic-text text-center text-xl text-muted mb-2">{UI_CONFIG.aboutArabic}</p>
+            <p className="text-muted text-lg">{UI_CONFIG.aboutSlogan}</p>
           </animated.div>
 
           {/* Content */}
@@ -54,10 +56,10 @@ export function AboutView() {
             <section className="bg-surface dark:bg-surface rounded-2xl border border-border p-6 md:p-8">
               <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-3">
                 <span className="text-3xl">🎯</span>
-                พันธกิจของเรา
+                {UI_CONFIG.ourMission}
               </h2>
               <p className="text-muted-dark dark:text-muted leading-relaxed mb-4">
-                <strong>Haqq Vault</strong> (حق - ความจริง) คือแพลตฟอร์มที่รวบรวมคำตอบสำหรับข้อกล่าวหา 
+                <strong>{SITE_CONFIG.name}</strong> ({SITE_CONFIG.logo.character} - ความจริง) คือแพลตฟอร์มที่รวบรวมคำตอบสำหรับข้อกล่าวหา 
                 ข้อสงสัย และความเข้าใจผิดเกี่ยวกับอิสลาม โดยใช้หลักฐานที่มั่นคงจากแหล่งอ้างอิงที่เชื่อถือได้
               </p>
               <p className="text-muted-dark dark:text-muted leading-relaxed">
@@ -70,29 +72,25 @@ export function AboutView() {
             <section className="bg-primary/5 dark:bg-primary/10 rounded-2xl border border-primary/20 p-6 md:p-8">
               <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-3">
                 <span className="text-3xl">💎</span>
-                หลักการของเรา
+                {UI_CONFIG.ourPrinciples}
               </h2>
               <div className="grid md:grid-cols-2 gap-6">
                 {[
                   {
                     icon: '📖',
-                    title: 'หลักฐานเป็นฐาน',
-                    desc: 'ทุกคำตอบอ้างอิงจากอัลกุรอาน หะดีษ และความเห็นนักวิชาการ',
+                    ...UI_CONFIG.labels.principles.evidence,
                   },
                   {
                     icon: '🔍',
-                    title: 'ความถูกต้อง',
-                    desc: 'ตรวจสอบความถูกต้องของหลักฐานก่อนนำเสนอ',
+                    ...UI_CONFIG.labels.principles.accuracy,
                   },
                   {
                     icon: '🎓',
-                    title: 'วิชาการ',
-                    desc: 'นำเสนอด้วยหลักวิชาการและเหตุผลที่ชัดเจน',
+                    ...UI_CONFIG.labels.principles.academic,
                   },
                   {
                     icon: '💬',
-                    title: 'เข้าถึงง่าย',
-                    desc: 'อธิบายเนื้อหายากให้เข้าใจง่ายสำหรับทุกคน',
+                    ...UI_CONFIG.labels.principles.accessible,
                   },
                 ].map((value, i) => (
                   <div key={i} className="flex items-start gap-4">
@@ -112,7 +110,7 @@ export function AboutView() {
             <section className="bg-surface dark:bg-surface rounded-2xl border border-border p-6 md:p-8">
               <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-3">
                 <span className="text-3xl">📚</span>
-                แหล่งอ้างอิงของเรา
+                {UI_CONFIG.ourSources}
               </h2>
               <ul className="space-y-3 text-muted-dark dark:text-muted">
                 <li className="flex items-start gap-3">
@@ -139,30 +137,29 @@ export function AboutView() {
               <div className="inline-block">
                 <AnimatedIslamicPattern type="star" size="sm" color="gold" className="mx-auto mb-4" />
                 <p className="arabic-text text-center text-2xl md:text-3xl text-primary mb-3">
-                  وَقُلْ جَاءَ الْحَقُّ وَزَهَقَ الْبَاطِلُ ۚ إِنَّ الْبَاطِلَ كَانَ زَهُوقًا
+                  {UI_CONFIG.labels.aboutQuote.arabic}
                 </p>
                 <p className="text-muted italic">
-                  "และจงกล่าวเถิดว่า ความจริงได้มาแล้ว และความเท็จได้มลายไป
-                  <br />แท้จริงความเท็จนั้นเป็นสิ่งที่ต้องมลายไป"
+                  {UI_CONFIG.labels.aboutQuote.thai}
                 </p>
-                <p className="text-sm text-muted mt-2">- ซูเราะฮ์อัลอิสรออ์ 17:81</p>
+                <p className="text-sm text-muted mt-2">{UI_CONFIG.labels.aboutQuote.source}</p>
               </div>
             </section>
 
             {/* CTA */}
             <div className="text-center">
               <p className="text-muted mb-6">
-                พร้อมที่จะค้นหาความจริงแล้วหรือยัง?
+                {UI_CONFIG.readyToExplore}
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Link href="/topics">
                   <AnimatedButton variant="primary" size="lg">
-                    ดูคำตอบทั้งหมด
+                    {UI_CONFIG.viewAll}
                   </AnimatedButton>
                 </Link>
                 <Link href="/contact">
                   <AnimatedButton variant="outline" size="lg">
-                    ติดต่อเรา
+                    {UI_CONFIG.labels.contactUs}
                   </AnimatedButton>
                 </Link>
               </div>

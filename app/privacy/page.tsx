@@ -1,9 +1,10 @@
+import { SITE_CONFIG } from '@/src/config/site.config';
 import { PrivacyView } from "@/src/presentation/components/legal/PrivacyView";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "นโยบายความเป็นส่วนตัว | Haqq Vault",
-  description: "นโยบายความเป็นส่วนตัวของ Haqq Vault",
+  title: SITE_CONFIG.metadata.privacy.title,
+  description: SITE_CONFIG.metadata.privacy.description,
 };
 
 export default function PrivacyPage() {

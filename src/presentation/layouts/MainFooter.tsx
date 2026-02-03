@@ -9,42 +9,19 @@ import { animated, useSpring } from '@react-spring/web';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+import { FOOTER_SECTIONS } from '@/src/config/navigation.config';
+import { SITE_CONFIG } from '@/src/config/site.config';
+import { UI_CONFIG } from '@/src/config/ui.config';
+
 interface FooterLink {
   href: string;
   label: string;
 }
 
-const FOOTER_SECTIONS = {
-  browse: {
-    title: 'ค้นหาคำตอบ',
-    links: [
-      { href: '/topics', label: 'คำตอบทั้งหมด' },
-      { href: '/categories', label: 'หมวดหมู่' },
-      { href: '/search', label: 'ค้นหา' },
-      { href: '/popular', label: 'ยอดนิยม' },
-    ],
-  },
-  categories: {
-    title: 'หมวดหมู่หลัก',
-    links: [
-      { href: '/categories/quran', label: 'อัลกุรอาน' },
-      { href: '/categories/prophet', label: 'ศาสดามุฮัมมัด ﷺ' },
-      { href: '/categories/women', label: 'สตรีในอิสลาม' },
-      { href: '/categories/science', label: 'วิทยาศาสตร์' },
-    ],
-  },
-  about: {
-    title: 'เกี่ยวกับเรา',
-    links: [
-      { href: '/about', label: 'เกี่ยวกับ Haqq Vault' },
-      { href: '/scholars', label: 'ทีมนักวิชาการ' },
-      { href: '/methodology', label: 'หลักการตอบคำถาม' },
-      { href: '/contact', label: 'ติดต่อเรา' },
-    ],
-  },
-};
-
 export function MainFooter() {
+    const version = process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0';
+  const commitSha = process.env.NEXT_PUBLIC_COMMIT_SHA || '';
+  const shortSha = commitSha.slice(0, 7);
   return (
     <footer className="relative overflow-hidden">
       {/* Islamic Pattern Background */}
@@ -65,25 +42,24 @@ export function MainFooter() {
                   <span className="relative text-2xl font-bold text-white z-10">ح</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-foreground">Haqq Vault</h3>
-                  <p className="text-sm text-muted">คลังคำตอบชุบฮาต</p>
+                  <h3 className="text-xl font-bold text-foreground">{SITE_CONFIG.name}</h3>
+                  <p className="text-sm text-muted">{SITE_CONFIG.slogan}</p>
                 </div>
               </Link>
               
               <p className="text-sm text-muted leading-relaxed mb-6">
-                แหล่งรวบรวมคำตอบสำหรับข้อกล่าวหาและข้อสงสัยเกี่ยวกับอิสลาม
-                โดยใช้หลักฐานจากอัลกุรอาน หะดีษ และความเห็นของบรรดานักวิชาการ
+                {SITE_CONFIG.description}
               </p>
 
               {/* Arabic Quote */}
               <div className="p-4 rounded-xl bg-primary/5 dark:bg-primary/10 border border-primary/20">
                 <p className="arabic-text text-lg text-primary-dark dark:text-primary-light mb-2">
-                  وَقُلْ رَبِّ زِدْنِي عِلْمًا
+                  {SITE_CONFIG.quotes.footer.arabic}
                 </p>
                 <p className="text-xs text-muted italic">
-                  "และจงกล่าวว่า โอ้พระผู้อภิบาลของฉัน โปรดเพิ่มพูนความรู้แก่ฉันด้วย"
+                  {SITE_CONFIG.quotes.footer.thai}
                 </p>
-                <p className="text-xs text-muted mt-1">- ซูเราะฮ์ฏอฮา 20:114</p>
+                <p className="text-xs text-muted mt-1">{SITE_CONFIG.quotes.footer.source}</p>
               </div>
             </div>
 
@@ -117,17 +93,22 @@ export function MainFooter() {
 
           {/* Bottom Section */}
           <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-muted text-center md:text-left">
-              © {new Date().getFullYear()} Haqq Vault. สงวนลิขสิทธิ์ (Demo Version)
-            </p>
+            {/* Copyright */}
+            <div className="flex items-center gap-2 text-xs md:text-sm text-muted overflow-hidden">
+              <span className="whitespace-nowrap">© {new Date().getFullYear()}</span>
+              <span className="font-semibold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent cursor-default truncate">
+                {SITE_CONFIG.name}
+              </span>
+              <span className="whitespace-nowrap">v{version} {shortSha && `(${shortSha})`}</span>
+            </div>
             
             <div className="flex items-center gap-4 text-sm text-muted">
               <Link href="/privacy" className="hover:text-primary transition-colors">
-                นโยบายความเป็นส่วนตัว
+                {UI_CONFIG.privacyTitle}
               </Link>
               <span className="w-1 h-1 rounded-full bg-muted/50" />
               <Link href="/terms" className="hover:text-primary transition-colors">
-                เงื่อนไขการใช้งาน
+                {UI_CONFIG.termsTitle}
               </Link>
             </div>
           </div>

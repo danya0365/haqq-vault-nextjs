@@ -5,6 +5,7 @@
  * Topic detail page showing full answer with evidences
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import type { Evidence } from '@/src/domain/types/evidence';
 import type { SeverityLevel, Topic } from '@/src/domain/types/topic';
 import { MOCK_CATEGORIES, MOCK_EVIDENCES, MOCK_TOPICS } from '@/src/infrastructure/repositories/mock/data/mockData';
@@ -60,11 +61,11 @@ export function TopicDetailView({ slug }: TopicDetailViewProps) {
   const getSeverityBadge = (level: SeverityLevel) => {
     switch (level) {
       case 'basic':
-        return { label: 'พื้นฐาน', class: 'badge-basic', icon: '🟢' };
+        return { label: UI_CONFIG.severity.basic, class: 'badge-basic', icon: '🟢' };
       case 'intermediate':
-        return { label: 'ปานกลาง', class: 'badge-intermediate', icon: '🟡' };
+        return { label: UI_CONFIG.severity.intermediate, class: 'badge-intermediate', icon: '🟡' };
       case 'advanced':
-        return { label: 'ขั้นสูง', class: 'badge-advanced', icon: '🔴' };
+        return { label: UI_CONFIG.severity.advanced, class: 'badge-advanced', icon: '🔴' };
     }
   };
 
@@ -124,7 +125,7 @@ export function TopicDetailView({ slug }: TopicDetailViewProps) {
               </span>
               {topic.isVerified && (
                 <span className="px-3 py-1 text-sm rounded-full bg-primary/10 text-primary flex items-center gap-1">
-                  <span>✓</span> ได้รับการยืนยัน
+                  <span>✓</span> {UI_CONFIG.labels.verified}
                 </span>
               )}
             </div>
@@ -377,7 +378,7 @@ function EvidenceSection({ evidences }: { evidences: Evidence[] }) {
                   <span className="font-medium text-muted">แหล่งอ้างอิง:</span>
                   <span className="text-primary">{evidence.source}</span>
                   {evidence.isAuthenticated && (
-                    <span className="text-green-600 dark:text-green-400" title="ตรวจสอบแล้ว">
+                    <span className="text-green-600 dark:text-green-400" title={UI_CONFIG.labels.verifiedCheck}>
                       ✓
                     </span>
                   )}

@@ -1,9 +1,10 @@
+import { SITE_CONFIG } from '@/src/config/site.config';
 import { PopularView } from "@/src/presentation/components/popular/PopularView";
-import type { Metadata } from "next";
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "คำตอบยอดนิยม | Haqq Vault",
-  description: "คำตอบที่ได้รับความสนใจและมีผู้เข้าชมมากที่สุด",
+  title: SITE_CONFIG.metadata.popular.title,
+  description: SITE_CONFIG.metadata.popular.description,
 };
 
 export default function PopularPage() {

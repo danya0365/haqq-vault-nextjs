@@ -5,6 +5,7 @@
  * Registration page with beautiful Islamic design
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { useAuthStore } from '@/src/infrastructure/stores/authStore';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
@@ -109,7 +110,7 @@ export function RegisterView() {
               <AnimatedIslamicPattern type="arabesque" size="lg" color="gold" animation="float" />
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-              สร้างบัญชีใหม่
+              {UI_CONFIG.labels.register}
             </h1>
             <p className="arabic-text text-lg text-muted mb-1">أنشئ حسابك الجديد</p>
             <p className="text-muted">เข้าร่วมชุมชน Haqq Vault</p>
@@ -138,7 +139,7 @@ export function RegisterView() {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="w-full px-4 py-3 pl-11 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                      placeholder="ชื่อของคุณ"
+                      placeholder={UI_CONFIG.placeholders.yourName}
                     />
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted">
                       👤
@@ -179,7 +180,7 @@ export function RegisterView() {
                       value={formData.password}
                       onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                       className="w-full px-4 py-3 pl-11 pr-11 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                      placeholder="อย่างน้อย 6 ตัวอักษร"
+                      placeholder={UI_CONFIG.placeholders.newPassword}
                     />
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted">
                       🔒
@@ -228,7 +229,7 @@ export function RegisterView() {
                           ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
                           : 'border-border focus:border-primary focus:ring-primary/20'
                       }`}
-                      placeholder="ยืนยันรหัสผ่าน"
+                      placeholder={UI_CONFIG.placeholders.confirmPasswordGeneral}
                     />
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted">
                       🔐
@@ -276,7 +277,7 @@ export function RegisterView() {
                       กำลังสมัครสมาชิก...
                     </span>
                   ) : (
-                    'สมัครสมาชิก'
+                    UI_CONFIG.labels.register
                   )}
                 </AnimatedButton>
               </form>

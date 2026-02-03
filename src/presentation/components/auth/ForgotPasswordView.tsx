@@ -5,6 +5,7 @@
  * Forgot password page
  */
 
+import { UI_CONFIG } from '@/src/config/ui.config';
 import { useAuthStore } from '@/src/infrastructure/stores/authStore';
 import { AnimatedButton } from '@/src/presentation/components/animated/AnimatedButton';
 import { AnimatedIslamicPattern } from '@/src/presentation/components/animated/AnimatedIslamicPattern';
@@ -56,9 +57,9 @@ export function ForgotPasswordView() {
               <AnimatedIslamicPattern type="octagon" size="lg" color="primary" animation="pulse" />
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-              ลืมรหัสผ่าน?
+              {UI_CONFIG.forgotPasswordTitle}
             </h1>
-            <p className="text-muted">ไม่ต้องกังวล เราจะช่วยคุณรีเซ็ตรหัสผ่าน</p>
+            <p className="text-muted">{UI_CONFIG.forgotPasswordSubtitle}</p>
           </animated.div>
 
           {/* Form */}
@@ -68,7 +69,7 @@ export function ForgotPasswordView() {
                 <div className="text-center py-6">
                   <div className="text-6xl mb-4">📧</div>
                   <h2 className="text-xl font-bold text-foreground mb-2">
-                    ตรวจสอบอีเมลของคุณ
+                    {UI_CONFIG.checkYourEmail}
                   </h2>
                   <p className="text-muted mb-6 text-sm">
                     หากอีเมล <span className="font-medium text-primary">{email}</span> มีอยู่ในระบบ
@@ -80,11 +81,11 @@ export function ForgotPasswordView() {
                       onClick={() => setIsSubmitted(false)}
                       className="w-full"
                     >
-                      ส่งใหม่อีกครั้ง
+                      {UI_CONFIG.resendLink}
                     </AnimatedButton>
                     <Link href="/auth/login" className="block">
                       <AnimatedButton variant="ghost" className="w-full">
-                        กลับไปเข้าสู่ระบบ
+                        {UI_CONFIG.backToLogin}
                       </AnimatedButton>
                     </Link>
                   </div>
@@ -92,7 +93,7 @@ export function ForgotPasswordView() {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <p className="text-sm text-muted">
-                    กรอกอีเมลที่ใช้ลงทะเบียน เราจะส่งลิงก์สำหรับรีเซ็ตรหัสผ่านให้คุณ
+                    {UI_CONFIG.resetLinkSent}
                   </p>
 
                   {/* Email */}
@@ -126,17 +127,17 @@ export function ForgotPasswordView() {
                     {isLoading ? (
                       <span className="flex items-center justify-center gap-2">
                         <span className="animate-spin">⏳</span>
-                        กำลังส่ง...
+                        {UI_CONFIG.sending}
                       </span>
                     ) : (
-                      'ส่งลิงก์รีเซ็ตรหัสผ่าน'
+                      UI_CONFIG.sendResetLink
                     )}
                   </AnimatedButton>
 
                   {/* Back to login */}
                   <Link href="/auth/login" className="block text-center">
                     <span className="text-sm text-primary hover:underline">
-                      ← กลับไปเข้าสู่ระบบ
+                      ← {UI_CONFIG.backToLogin}
                     </span>
                   </Link>
                 </form>
